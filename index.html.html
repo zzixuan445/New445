@@ -1,0 +1,2834 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>夢幻街機 - 極限剪髮、時尚穿搭與氣球狙擊手挑戰機</title>
+    <!-- 引入 Tailwind CSS 確保極致排版與快速渲染 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-deep: #080c16;
+            --panel-bg: rgba(20, 26, 38, 0.75);
+            --panel-border: rgba(255, 255, 255, 0.1);
+            --primary-orange: linear-gradient(180deg, #ff9b85 0%, #ff3b3b 35%, #d60000 100%);
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff00a0;
+            --neon-green: #39ff14;
+            --arc-gold: #ffe600;
+            --line-green: #06C755;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-deep);
+            color: #ffffff;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow: hidden;
+        }
+
+        /* 街機主框體 */
+        .arcade-cabinet {
+            width: 1024px; height: 768px;
+            background: linear-gradient(135deg, #09101d 0%, #111622 50%, #060910 100%);
+            border: 4px solid rgba(0, 243, 255, 0.25);
+            border-radius: 32px; position: relative;
+            box-shadow: 
+                0 0 50px rgba(0, 243, 255, 0.15), 
+                inset 0 0 60px rgba(255, 0, 160, 0.1);
+            display: flex; flex-direction: column;
+            padding: 35px; overflow: hidden;
+        }
+
+        /* 完美還原螢幕截圖中的背景手繪塗鴉與光暈 */
+        .bg-doodles {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
+        .doodle-svg {
+            position: absolute; opacity: 0.12; filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
+        }
+
+        /* 磨砂玻璃科技感卡片 */
+        .glass-card {
+            background: linear-gradient(145deg, rgba(16, 22, 35, 0.9) 0%, rgba(10, 14, 24, 0.98) 100%);
+            border-radius: 24px; position: relative;
+            box-shadow: inset 0 2px 15px rgba(255,255,255,0.02), 0 15px 35px rgba(0,0,0,0.6);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* 新增主頁三格選項框之呼吸霓虹燈效與懸浮特效 */
+        .neon-card-cyan {
+            border: 2px solid var(--neon-cyan) !important;
+            animation: neonCyanGlow 2.5s infinite alternate;
+        }
+        @keyframes neonCyanGlow {
+            0% { box-shadow: 0 0 12px rgba(0, 243, 255, 0.35), inset 0 0 8px rgba(0, 243, 255, 0.15); }
+            100% { box-shadow: 0 0 32px rgba(0, 243, 255, 0.75), inset 0 0 20px rgba(0, 243, 255, 0.35); }
+        }
+        .neon-card-cyan:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 45px rgba(0, 243, 255, 0.9), inset 0 0 25px rgba(0, 243, 255, 0.45);
+        }
+
+        .neon-card-pink {
+            border: 2px solid var(--neon-pink) !important;
+            animation: neonPinkGlow 2.5s infinite alternate;
+        }
+        @keyframes neonPinkGlow {
+            0% { box-shadow: 0 0 12px rgba(255, 0, 160, 0.35), inset 0 0 8px rgba(255, 0, 160, 0.15); }
+            100% { box-shadow: 0 0 32px rgba(255, 0, 160, 0.75), inset 0 0 20px rgba(255, 0, 160, 0.35); }
+        }
+        .neon-card-pink:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 45px rgba(255, 0, 160, 0.9), inset 0 0 25px rgba(255, 0, 160, 0.45);
+        }
+
+        .neon-card-yellow {
+            border: 2px solid var(--arc-gold) !important;
+            animation: neonYellowGlow 2.5s infinite alternate;
+        }
+        @keyframes neonYellowGlow {
+            0% { box-shadow: 0 0 12px rgba(255, 230, 0, 0.35), inset 0 0 8px rgba(255, 230, 0, 0.15); }
+            100% { box-shadow: 0 0 32px rgba(255, 230, 0, 0.75), inset 0 0 20px rgba(255, 230, 0, 0.35); }
+        }
+        .neon-card-yellow:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 45px rgba(255, 230, 0, 0.9), inset 0 0 25px rgba(255, 230, 0, 0.45);
+        }
+
+        /* 大型水晶果凍按鈕 */
+        .crystal-btn {
+            background: var(--primary-orange); 
+            padding: 16px 50px; border-radius: 50px;
+            font-size: 22px; font-weight: 900; color: white; cursor: pointer;
+            border: 2px solid #ffb3b3; letter-spacing: 2px; transition: all 0.1s;
+            box-shadow: 
+                inset 0 6px 12px rgba(255,255,255,0.7), 
+                inset 0 -5px 12px rgba(0,0,0,0.3), 
+                0 10px 25px rgba(230, 0, 0, 0.5);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            display: inline-flex; justify-content: center; align-items: center;
+            white-space: nowrap; min-width: 260px;
+        }
+        .crystal-btn:hover { transform: scale(1.03); filter: brightness(1.15); box-shadow: inset 0 6px 12px rgba(255,255,255,0.8), inset 0 -5px 12px rgba(0,0,0,0.2), 0 12px 35px rgba(230, 0, 0, 0.7); }
+        .crystal-btn:active { transform: scale(0.97); box-shadow: inset 0 3px 20px rgba(0,0,0,0.6); }
+
+        /* 返回大廳按鈕 */
+        .home-btn {
+            position: absolute; top: 25px; left: 25px; z-index: 150;
+            background: rgba(30, 41, 59, 0.8); border: 2px solid #475569; border-radius: 50%;
+            width: 55px; height: 55px; display: flex; justify-content: center; align-items: center;
+            font-size: 24px; color: white; cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .home-btn:hover { background: #334155; border-color: var(--neon-cyan); transform: scale(1.1); box-shadow: 0 0 15px rgba(0,243,255,0.4); }
+
+        /* 拍照鏡像控制 */
+        #video-stream { transform: scaleX(-1); width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
+        #captured-image { transform: none; width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
+
+        /* 寫實3D質感髮絲樣式 */
+        .dynamic-strand {
+            position: absolute; width: 16px; border-radius: 4px 4px 50% 50%; 
+            background: repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0px, rgba(255,255,255,0.1) 1px, rgba(0,0,0,0.06) 3px),
+                        linear-gradient(180deg, #704700 0%, #ccaa00 20%, #ffe666 45%, #ca9900 85%, #5a3a00 100%);
+            box-shadow: inset 3px 0 5px rgba(255, 255, 255, 0.3), inset -3px 0 6px rgba(60, 40, 0, 0.6), 3px 3px 6px rgba(0, 0, 0, 0.4);            
+            transform-origin: top center; pointer-events: none; transition: height 0.05s ease-out;
+        }
+        .dynamic-strand::after {
+            content: ''; position: absolute; bottom: 0; left: 10%; width: 80%; height: 12px;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.5)); border-radius: 0 0 10px 10px;
+        }
+
+        /* 倒數計時 */
+        .countdown-overlay {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 150px; font-weight: 900; color: var(--neon-cyan); text-shadow: 0 0 20px var(--neon-cyan), 0 0 50px #fff;
+            z-index: 15; pointer-events: none; opacity: 0;
+        }
+        .countdown-pop { animation: popIn 1s ease-in-out; }
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+            40% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+            60% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+
+        /* 閃光燈 */
+        .flash-effect {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; border-radius: 16px; z-index: 20; pointer-events: none;
+            animation: flashAnim 0.6s ease-out forwards;
+        }
+        @keyframes flashAnim { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+        @keyframes pop {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.35); opacity: 0.8; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        .pop-effect {
+            animation: pop 0.25s ease-out forwards;
+        }
+
+        /* 彩券吐出的動畫 */
+        @keyframes ticket-out {
+            0% { transform: translateY(-100%) scaleY(0); opacity: 0; }
+            20% { transform: translateY(0) scaleY(1); opacity: 1; }
+            100% { transform: translateY(80px); opacity: 1; }
+        }
+        .ticket-strip {
+            animation: ticket-out 1s ease-out forwards;
+        }
+
+        /* 綠色中獎框框的閃爍與淡出 */
+        @keyframes prize-flash {
+            0% { transform: scale(0.5); opacity: 0; }
+            20% { transform: scale(1.1); opacity: 1; }
+            80% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0; }
+        }
+        .prize-toast {
+            animation: prize-flash 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* 紅色未中獎框框的閃爍與淡出 */
+        @keyframes miss-flash {
+            0% { transform: scale(0.5); opacity: 0; }
+            20% { transform: scale(1.1); opacity: 1; }
+            80% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0; }
+        }
+        .miss-toast {
+            animation: miss-flash 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* 炸彈引信火花動畫 */
+        @keyframes spark {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px #facc15); }
+            50% { transform: scale(1.3); filter: drop-shadow(0 0 6px #f97316); }
+        }
+        .spark-glow {
+            animation: spark 0.3s infinite ease-in-out;
+        }
+
+        /* 旋轉霓虹等待轉圈 */
+        .neon-spinner {
+            width: 80px; height: 80px; border: 8px solid rgba(0, 243, 255, 0.2);
+            border-top: 8px solid var(--neon-cyan); border-radius: 50%;
+            animation: spin 1s linear infinite; margin: 0 auto 30px auto;
+            box-shadow: 0 0 20px rgba(0,243,255,0.5);
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* 齊瀏海專用卡片邊框 */
+        .card {
+            background: linear-gradient(145deg, rgba(20, 28, 45, 0.85) 0%, rgba(10, 15, 25, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 22px 18px 18px 18px; position: relative;
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            box-shadow: inset 0 2px 15px rgba(255,255,255,0.03), 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .card-title {
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(180deg, #374151, #1e293b); color: #e2e8f0;
+            padding: 4px 20px; border-radius: 20px; font-size: 14px; font-weight: 800;
+            white-space: nowrap; text-shadow: 0 2px 4px rgba(0, 243, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            box-shadow: 0 4px 12px rgba(0, 243, 255, 0.3), 0 0 8px rgba(0, 243, 255, 0.2);
+        }
+
+        .control-group { margin-top: 10px; margin-bottom: 12px; }
+        .control-group:last-child { margin-bottom: 0; }
+        .control-label { font-size: 13px; color: #cbd5e1; margin-bottom: 6px; display: block; font-weight: bold; }
+        .slider { width: 100%; -webkit-appearance: none; background: #1e293b; height: 8px; border-radius: 4px; outline: none; border: 1px solid rgba(255,255,255,0.05); }
+        .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #3b82f6; cursor: pointer; box-shadow: 0 0 10px rgba(59, 130, 246, 0.6); }
+        .slider-green::-webkit-slider-thumb { background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
+        .slider-purple::-webkit-slider-thumb { background: var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink); }
+
+        /* 相機定位框與基準線 */
+        .canvas-area {
+            flex: 1; background: #0f131a; border-radius: 20px; position: relative; overflow: hidden;
+            border: 1px solid rgba(255, 0, 160, 0.2);
+            box-shadow: 0 0 0 2px rgba(0, 243, 255, 0.15), 0 0 30px rgba(0, 243, 255, 0.1), inset 0 0 30px rgba(255, 0, 160, 0.1);
+        }
+        .stage-container { width: 100%; height: 100%; position: relative; }
+
+        /* 相機容器定義 */
+        .camera-container {
+            position: absolute; width: 520px; height: 420px;
+            left: 50%; top: 48%; transform: translate(-50%, -50%) scale(1);
+            transition: all 0.4s ease;
+        }
+        .camera-container.photo-stage-large { width: 520px; height: 420px; top: 48%; }
+        
+        /* 滿版相機樣式 */
+        .camera-container.photo-stage-full {
+            width: 100% !important;
+            height: 100% !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            border-radius: 20px;
+        }
+
+        .forehead-box {
+            position: absolute; width: 280px; height: 110px; border: 3px solid var(--neon-pink); border-radius: 16px; background: rgba(255, 0, 160, 0.08);
+            left: 50%; top: 20%; transform: translateX(-50%); display: flex; justify-content: center; align-items: center;
+            color: #f3e8ff; font-size: 16px; font-weight: bold; letter-spacing: 2px; pointer-events: none; z-index: 5;
+            box-shadow: 0 0 15px rgba(255, 0, 160, 0.5), inset 0 0 10px rgba(255, 0, 160, 0.3); text-shadow: 0 0 5px var(--neon-pink); transition: all 0.4s ease;
+        }
+        .forehead-box.photo-stage-large-box { top: 20%; width: 280px; height: 110px; font-size: 16px; }
+
+        .green-base-line {
+            position: absolute; width: 100%; height: 2px; border-top: 3px dashed var(--neon-green); left: 0; top: 45%; pointer-events: none; z-index: 4;
+            filter: drop-shadow(0 0 8px var(--neon-green)); display: none;
+        }
+
+        .hair-game-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6; }
+        #hair-top-arc-path { stroke: var(--arc-gold); filter: drop-shadow(0 0 10px var(--arc-gold)); }
+
+        /* 磨砂玻璃拉霸 */
+        .lottery-carousel {
+            height: 60px; background: rgba(0, 0, 0, 0.4); border-radius: 12px; margin-top: 10px; overflow: hidden; position: relative; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 10px rgba(0, 243, 255, 0.1);
+        }
+        .lottery-blur-mask {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            backdrop-filter: blur(25px) saturate(160%); -webkit-backdrop-filter: blur(25px) saturate(160%);
+            background: linear-gradient(90deg, rgba(18,25,38,0.95) 0%, rgba(18,25,38,0.0) 50%, rgba(18,25,38,0.95) 100%); z-index: 2; pointer-events: none;
+        }
+        .lottery-track { display: flex; flex-direction: column; position: absolute; width: 100%; top: 0; z-index: 1; }
+        .lottery-item { height: 60px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; color: #f97316; text-shadow: 0 0 10px rgba(249,115,22,0.7); }
+
+        .stars-container, .scissors-container { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
+        .star { font-size: 28px; color: #475569; text-shadow: inset 0 1px 2px #000; } 
+        .star.active { color: var(--arc-gold); text-shadow: 0 0 15px var(--arc-gold); }
+        .scissor-icon { font-size: 28px; color: #475569; } 
+        .scissor-icon.active { color: var(--arc-gold); filter: drop-shadow(0 0 8px var(--arc-gold)); }
+        
+        .btn-reset { 
+            background: var(--primary-orange); border: 1px solid #ff9933; color: white; padding: 12px; width: 100%; border-radius: 25px; 
+            font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: inset 0 2px 5px rgba(255,255,255,0.4), 0 5px 15px rgba(0,0,0,0.5); text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+        }
+        .btn-reset:active { transform: scale(0.96); }
+
+        /* 全域結算蓋台：預設設為 flex 疊加 */
+        .result-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 8, 15, 0.95); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 24px; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* 霓虹發光按鈕特效 */
+        .btn-neon-pulse {
+            animation: neonPulse 1.5s infinite alternate;
+        }
+        @keyframes neonPulse {
+            0% { box-shadow: inset 0 6px 12px rgba(255,255,255,0.7), 0 5px 15px rgba(230,0,0,0.6), 0 0 10px var(--neon-pink); }
+            100% { box-shadow: inset 0 6px 12px rgba(255,255,255,0.7), 0 8px 25px rgba(230,0,0,0.8), 0 0 25px var(--neon-cyan); }
+        }
+
+        .hidden { display: none !important; }
+
+        /* 骨骼與配件舞台 */
+        .skeleton-stage {
+            position: relative;
+            width: 220px;
+            height: 350px;
+            margin: 0 auto;
+            transform: scale(1.35); 
+            transform-origin: center center;
+        }
+
+        /* 服飾物件定位 */
+        .fit-layer {
+            position: absolute;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #pos-hat { top: -20px; left: 50%; transform: translate(-50%, 0) scale(0); z-index: 50; width: 140px; height: 100px; transform-origin: bottom center; }
+        #pos-accessory { top: 53px; left: 50%; transform: translate(-50%, 0) scale(0); z-index: 45; width: 100px; height: 40px; transform-origin: center center; }
+        #pos-top { top: 100px; left: 50%; transform: translate(-50%, 0) scale(0); z-index: 30; width: 150px; height: 120px; transform-origin: top center; }
+        #pos-bottom { top: 185px; left: 50%; transform: translate(-50%, 0) scale(0); z-index: 25; width: 140px; height: 130px; transform-origin: top center; }
+        #pos-bag { top: 180px; left: -15px; transform: scale(0) rotate(-10deg); z-index: 40; width: 90px; height: 100px; transform-origin: bottom right; }
+        #pos-shoes { top: 310px; left: 50%; transform: translate(-50%, 0) scale(0); z-index: 35; width: 150px; height: 60px; transform-origin: bottom center; }
+
+        /* 右側圓圈選擇鈕 */
+        .option-circle {
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.2s, border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+        }
+        .option-circle:active { transform: scale(0.95); }
+
+        /* 答對綠框鎖定樣式 */
+        .circle-correct-locked {
+            border-color: #10b981 !important;
+            background-color: #111c18 !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+            cursor: default !important;
+        }
+
+        /* 答錯閃爍紅色 */
+        .circle-wrong-flash {
+            animation: flash-red 0.4s ease-out;
+        }
+        @keyframes flash-red {
+            0% { border-color: rgba(255, 255, 255, 0.1); box-shadow: none; }
+            50% { border-color: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.8); background-color: #291518; }
+            100% { border-color: rgba(255, 255, 255, 0.1); box-shadow: none; }
+        }
+
+        /* 漸變淡入動畫，用於解說影片彈窗 */
+        .animate-fadeIn {
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-950">
+
+    <div class="arcade-cabinet select-none">
+        
+        <!-- 背景裝飾與發光圖樣 -->
+        <div class="bg-doodles">
+            <!-- 左上角粉紅色票券 -->
+            <svg class="doodle-svg" style="top: 8%; left: 8%; width: 50px; height: 50px;" viewBox="0 0 24 24" fill="none" stroke="#ff00a0" stroke-width="1.5">
+                <path d="M2 9V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a3 3 0 0 0 0 6v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-4a3 3 0 0 0 0-6Z" />
+                <path d="M12 8v8" stroke-dasharray="2 2" />
+            </svg>
+            <!-- 左中粉紅色剪刀 -->
+            <svg class="doodle-svg" style="top: 42%; left: -1%; width: 55px; height: 55px;" viewBox="0 0 24 24" fill="none" stroke="#ff00a0" stroke-width="1.5">
+                <circle cx="6" cy="6" r="3" />
+                <circle cx="6" cy="18" r="3" />
+                <line x1="20" y1="4" x2="8.12" y2="15.88" />
+                <line x1="14.47" y1="9.53" x2="20" y2="15" />
+                <line x1="8.12" y1="8.12" x2="12" y2="12" />
+            </svg>
+            <!-- 右上黃色星星 -->
+            <svg class="doodle-svg" style="top: 22%; right: 6%; width: 45px; height: 45px;" viewBox="0 0 24 24" fill="none" stroke="#ffe600" stroke-width="1.5">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            <!-- 底部偏左粉紅色大張彩券 -->
+            <svg class="doodle-svg" style="bottom: 8%; left: 32%; width: 90px; height: 90px;" viewBox="0 0 24 24" fill="none" stroke="#ff00a0" stroke-width="1.2">
+                <path d="M2 9V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a3 3 0 0 0 0 6v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-4a3 3 0 0 0 0-6Z" />
+                <rect x="7" y="7" width="10" height="10" rx="1" stroke-dasharray="2 2" />
+            </svg>
+            <!-- 右下角理髮廳燈柱 -->
+            <svg class="doodle-svg" style="bottom: 4%; right: 28%; width: 50px; height: 75px;" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.5">
+                <rect x="5" y="3" width="14" height="18" rx="2" stroke="#ffffff" />
+                <path d="M5 7 L19 11" stroke="#ff00a0" stroke-width="2" />
+                <path d="M5 12 L19 16" stroke="#00f3ff" stroke-width="2" />
+                <path d="M5 17 L19 21" stroke="#ff00a0" stroke-width="2" />
+            </svg>
+        </div>
+
+        <!-- 返回大廳按鈕 -->
+        <div class="home-btn hidden" id="global-home-btn" onclick="returnToLobby()">🏠</div>
+
+        <!-- ============================================ -->
+        <!--  1. 遊戲大廳首頁 (LOBBY VIEW) -->
+        <!-- ============================================ -->
+        <div id="view-lobby" class="w-full h-full flex flex-col justify-between items-center z-10 py-6">
+            <div class="text-center mt-3">
+                <h1 class="text-5xl font-black tracking-widest flex items-center justify-center gap-4 text-white">
+                    <span class="text-[#00f3ff] drop-shadow-[0_0_12px_rgba(0,243,255,0.85)] text-4xl animate-pulse">★</span>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#00f3ff] via-cyan-100 to-[#00f3ff] drop-shadow-[0_0_15px_rgba(0,243,255,0.8)] font-black tracking-[0.1em] text-5xl">精選街機挑戰機</span>
+                    <svg class="w-10 h-10 text-pink-500 fill-pink-500 drop-shadow-[0_0_10px_rgba(255,0,160,0.8)]" viewBox="0 0 24 24">
+                        <path d="M22 10V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v4a2 2 0 0 1 0 4v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 1 0-4z"/>
+                    </svg>
+                </h1>
+                <p class="text-slate-400 text-lg mt-3 font-semibold tracking-wider">請選擇你要挑戰的熱門遊戲</p>
+                
+                <!-- 新增：觀看教學影片按鈕 -->
+                <button onclick="openVideoGuide()" class="mt-4 px-6 py-2 bg-gradient-to-r from-cyan-500/10 to-pink-500/10 border border-cyan-400/50 rounded-full text-cyan-300 font-extrabold hover:from-cyan-500/30 hover:to-pink-500/30 hover:border-cyan-300 hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(0,243,255,0.15)] text-sm flex items-center gap-2 mx-auto active:scale-95">
+                    <span>🎬</span> 觀看遊戲玩法教學解說影片
+                </button>
+            </div>
+
+            <div class="grid grid-cols-3 gap-8 w-full max-w-5xl px-8 my-auto">
+                
+                <!-- 遊戲1：極限剪髮挑戰 -->
+                <div onclick="lobbySelectGame('極限剪髮挑戰', 100)" 
+                     class="glass-card p-10 flex flex-col items-center justify-between text-center cursor-pointer neon-card-cyan aspect-[4/5]">
+                    <div class="my-auto flex flex-col items-center">
+                        <svg class="w-20 h-20 mb-6 drop-shadow-[0_0_12px_rgba(255,0,160,0.4)]" viewBox="0 0 100 100" fill="none">
+                            <circle cx="38" cy="65" r="9" stroke="#ff00a0" stroke-width="5" fill="none" />
+                            <circle cx="62" cy="65" r="9" stroke="#9333ea" stroke-width="5" fill="none" />
+                            <path d="M 38 58 L 65 30 L 70 35 L 43 63 Z" fill="#ffffff" />
+                            <path d="M 62 58 L 35 30 L 30 35 L 57 63 Z" fill="#ffffff" />
+                            <circle cx="50" cy="49" r="4.5" fill="#1e293b" stroke="#ffffff" stroke-width="2.5" />
+                        </svg>
+                        <h3 class="text-2xl font-black tracking-wider text-white">極限剪髮挑戰</h3>
+                        <p class="text-sm text-slate-400 mt-2 font-medium">對準並裁剪出完美瀏海</p>
+                    </div>
+                    <span class="text-sm font-bold bg-[#091a24] text-[#00f3ff] border border-[#00f3ff]/40 px-6 py-2 rounded-full tracking-wider shadow-[0_0_15px_rgba(0,243,255,0.2)]">$100 / 次</span>
+                </div>
+
+                <!-- 遊戲2：時尚記憶大考驗 -->
+                <div onclick="lobbySelectGame('時尚記憶對對碰', 100)" 
+                     class="glass-card p-10 flex flex-col items-center justify-between text-center cursor-pointer neon-card-pink aspect-[4/5]">
+                    <div class="my-auto flex flex-col items-center">
+                        <svg class="w-20 h-20 mb-6 drop-shadow-[0_0_12px_rgba(255,0,160,0.3)]" viewBox="0 0 100 100" fill="none">
+                            <path d="M47 30 C30 30 22 42 22 55 C22 68 32 73 42 73 C46 73 47 70 47 67 C47 61 44 56 44 50 C44 44 47 40 47 40 Z" fill="#ff4da6" />
+                            <path d="M53 30 C70 30 78 42 78 55 C78 68 68 73 58 73 C54 73 53 70 53 67 C53 61 56 56 56 50 C56 44 53 40 53 40 Z" fill="#ff4da6" />
+                            <path d="M35 42 C30 46 30 52 35 56" stroke="#ffd043" stroke-width="3" stroke-linecap="round" fill="none" />
+                            <path d="M30 52 C26 56 28 62 33 65" stroke="#ffd043" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            <path d="M65 42 C70 46 70 52 65 56" stroke="#ffd043" stroke-width="3" stroke-linecap="round" fill="none" />
+                            <path d="M70 52 C74 56 72 62 67 65" stroke="#ffd043" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                        </svg>
+                        <h3 class="text-2xl font-black tracking-wider text-white">時尚記憶大考驗</h3>
+                        <p class="text-sm text-slate-400 mt-2 font-medium">時尚配對</p>
+                    </div>
+                    <span class="text-sm font-bold bg-[#1d0a16] text-[#ff00a0] border border-[#ff00a0]/40 px-6 py-2 rounded-full tracking-wider shadow-[0_0_15px_rgba(255,0,160,0.2)]">$100 / 次</span>
+                </div>
+
+                <!-- 遊戲3：氣球狙擊手 -->
+                <div onclick="lobbySelectGame('氣球狙擊手', 100)" 
+                     class="glass-card p-10 flex flex-col items-center justify-between text-center cursor-pointer neon-card-yellow aspect-[4/5]">
+                    <div class="my-auto flex flex-col items-center">
+                        <svg class="w-20 h-20 mb-6 drop-shadow-[0_0_12px_rgba(239,68,68,0.3)]" viewBox="0 0 100 100" fill="none">
+                            <ellipse cx="50" cy="45" rx="14" ry="18" fill="#ef4444" />
+                            <polygon points="47,63 53,63 50,59" fill="#ef4444" />
+                            <path d="M45 35 Q40 40 42 46" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.8" />
+                            <path d="M50 63 Q46 72 52 82" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" fill="none" />
+                        </svg>
+                        <h3 class="text-2xl font-black tracking-wider text-white">氣球狙擊手</h3>
+                        <p class="text-sm text-slate-400 mt-2 font-medium">手眼協調瘋狂擊破挑戰</p>
+                    </div>
+                    <span class="text-sm font-bold bg-[#1c1409] text-[#ffe600] border border-[#ffe600]/40 px-6 py-2 rounded-full tracking-wider shadow-[0_0_15px_rgba(255,230,0,0.2)]">$100 / 次</span>
+                </div>
+
+            </div>
+
+            <div class="text-slate-500 text-xs tracking-wider font-semibold mb-2 flex items-center gap-1">
+                * 兌換彩券可直接折抵現場消費，彩券兌換機保留活動修改權利。
+                <svg class="w-4 h-4 inline text-pink-500/60 fill-pink-500/60" viewBox="0 0 24 24">
+                    <path d="M22 10V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v4a2 2 0 0 1 0 4v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 1 0-4z"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!--  新增：教學影片解說彈窗 (VIDEO GUIDE OVERLAY) -->
+        <!-- ============================================ -->
+        <div id="video-guide-modal" class="absolute inset-0 bg-slate-950/95 z-[200] flex justify-center items-center rounded-2xl hidden animate-fadeIn">
+            <div class="glass-card max-w-2xl w-[680px] p-8 border border-cyan-500/30 shadow-[0_0_40px_rgba(0,243,255,0.25)] flex flex-col gap-4">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <div class="text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-pink-500 flex items-center gap-2">
+                        <span>🎬</span> 街機新手教學解說
+                    </div>
+                    <button onclick="closeVideoGuide()" class="text-slate-400 hover:text-white font-black text-xl transition-colors">✕</button>
+                </div>
+                
+                <!-- 遊戲選擇 Tabs -->
+                <div class="flex gap-2 justify-center">
+                    <button onclick="switchGuideVideo('bangs')" id="tab-guide-bangs" class="px-4 py-2 rounded-lg text-sm font-bold bg-cyan-950/50 text-cyan-400 border border-cyan-500/30 transition-all duration-200 shadow-[0_0_10px_rgba(0,243,255,0.2)]">
+                        💈 極限剪髮挑战
+                    </button>
+                    <button onclick="switchGuideVideo('memory')" id="tab-guide-memory" class="px-4 py-2 rounded-lg text-sm font-bold bg-slate-800 text-slate-400 border border-transparent transition-all duration-200">
+                        🧠 時尚記憶大考驗
+                    </button>
+                    <button onclick="switchGuideVideo('sniper')" id="tab-guide-sniper" class="px-4 py-2 rounded-lg text-sm font-bold bg-slate-800 text-slate-400 border border-transparent transition-all duration-200">
+                        🎈 氣球狙擊手
+                    </button>
+                </div>
+                
+                <!-- 影片播放器容器 -->
+                <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+                    <!-- 內置高效且穩定的 Google 範例影片作爲玩法教學 placeholder -->
+                    <video id="guide-video-player" class="w-full h-full object-cover" controls autoplay loop muted>
+                        <source id="guide-video-source" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+                        您的瀏覽器不支援 Video 標籤。
+                    </video>
+                </div>
+                
+                <!-- 簡單玩法解說 -->
+                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                    <p id="guide-video-desc" class="text-sm text-slate-300 leading-relaxed font-semibold">
+                        📌 <strong>極限剪髮挑戰：</strong> 拍照後，拖曳左側拉桿微調相片大小及上下位置。接著在右側螢幕上用滑鼠拖曳或手指導航，對準綠色水平基準線，裁剪出完美齊瀏海！越貼近綠色虛線分數越高。
+                    </p>
+                </div>
+                
+                <div class="flex justify-end mt-1">
+                    <button class="px-6 py-2 bg-slate-800 hover:bg-slate-700 hover:text-cyan-300 text-white font-bold rounded-lg transition-colors text-sm" onclick="closeVideoGuide()">
+                        返回大廳
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!--  2. 付款方式頁面 (PAYMENT VIEW) -->
+        <!-- ============================================ -->
+        <div id="view-payment" class="w-full h-full flex flex-col justify-between items-center z-10 py-6 hidden">
+            <div class="text-center">
+                <h1 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-300 tracking-wider">
+                    請選擇支付方式
+                </h1>
+                <p class="text-pink-500 text-md mt-2 font-bold tracking-widest">STEP 2 / 2</p>
+            </div>
+
+            <!-- 訂單與金額明細 -->
+            <div class="glass-card px-8 py-3 rounded-full flex gap-6 items-center border border-yellow-500/30 shadow-[0_0_15px_rgba(255,230,0,0.15)]">
+                <span class="font-bold text-slate-400 text-base">已選擇：<strong id="pay-game-title" class="text-white">---</strong></span>
+                <span class="h-4 w-[1px] bg-slate-700"></span>
+                <span class="font-bold text-slate-400 text-base">支付金額：<strong id="pay-game-price" class="text-cyan-400 text-xl">$100</strong></span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-6 w-full max-w-3xl px-6">
+                <div onclick="simulatePay('悠遊卡')" class="glass-card p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:-translate-y-2 border-2 border-emerald-500/30 hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(52,211,153,0.3)]">
+                    <span class="text-6xl mb-3">💳</span>
+                    <span class="text-xl font-extrabold text-emerald-400 tracking-wider">悠遊卡</span>
+                    <span class="text-xs text-slate-400 mt-2">請將卡片放置於感應區</span>
+                </div>
+
+                <div onclick="simulatePay('信用卡')" class="glass-card p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:-translate-y-2 border-2 border-cyan-500/30 hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                    <span class="text-6xl mb-3">🏦</span>
+                    <span class="text-xl font-extrabold text-cyan-400 tracking-wider">信用卡支付</span>
+                    <span class="text-xs text-slate-400 mt-2">支援感應式 Apple / Google Pay</span>
+                </div>
+
+                <div onclick="simulatePay('LINE Pay')" class="glass-card p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:-translate-y-2 border-2 border-green-500/30 hover:border-green-400 hover:shadow-[0_0_20px_rgba(34,197,94,0.3)]">
+                    <span class="text-6xl mb-3">📱</span>
+                    <span class="text-xl font-extrabold text-green-400 tracking-wider">LINE Pay</span>
+                    <span class="text-xs text-slate-400 mt-2">請將付款條碼對準掃描槍</span>
+                </div>
+            </div>
+
+            <div class="text-slate-500 text-xs font-semibold">
+                本機台交易由街機安全金流加密保護
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!--  3. 付款處理中 / 成功動畫頁面 -->
+        <!-- ============================================ -->
+        <div id="view-payment-processing" class="w-full h-full flex flex-col justify-center items-center z-10 hidden">
+            <div id="pay-loader" class="neon-spinner"></div>
+            <div id="pay-success-check" class="hidden text-7xl bg-emerald-500 text-slate-950 w-24 h-24 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(16,185,129,0.6)] font-bold">✓</div>
+            <h1 id="pay-status-text" class="text-3xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-white">正在處理交易中，請稍候...</h1>
+        </div>
+
+        <!-- ============================================ -->
+        <!--  4. 遊戲 1 畫面：拍貼極限剪髮挑戰 (BANGS GAME)-->
+        <!-- ============================================ -->
+        <div id="view-game-bangs" class="w-full h-full flex gap-6 z-10 hidden">
+            <!-- 說明卡蓋層 -->
+            <div id="bangs-intro-overlay" class="absolute inset-0 bg-slate-950/95 z-50 flex justify-center items-center rounded-2xl">
+                <div class="glass-card max-w-xl p-8 text-center border-2 border-cyan-500/30 shadow-[0_0_40px_rgba(0,243,255,0.2)]">
+                    <div class="text-3xl font-black mb-6 tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-white to-cyan-400">✂️ 拍貼極限剪髮挑戰 💈</div>
+                    <div class="text-left space-y-4 text-slate-300 font-semibold mb-6">
+                        <div class="flex items-center gap-3"><span class="bg-pink-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>請對準框線，按下按鈕<strong>拍攝您的美照</strong>。</div>
+                        <div class="flex items-center gap-3"><span class="bg-pink-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>使用左側拉桿<strong>調整相片與位置</strong>，對齊臉部。</div>
+                        <div class="flex items-center gap-3"><span class="bg-pink-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>用手指或滑鼠在畫面上<strong>滑動裁剪</strong>出完美齊瀏海。</div>
+                        <div class="flex items-center gap-3"><span class="bg-pink-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">4</span>越接近綠色<strong>基準線分數越高</strong>，贏取大獎！</div>
+                    </div>
+                    <button class="crystal-btn btn-neon-pulse" onclick="startBangsGame()">開始挑戰</button>
+                </div>
+            </div>
+
+            <!-- 左側操作面板 -->
+            <div class="w-[300px] h-full flex flex-col justify-between hidden" id="bangs-left-panel">
+                <!-- 影像編輯卡 -->
+                <div id="panel-setup" class="card">
+                    <div class="card-title">影像編輯</div>
+                    <div class="control-group mt-3">
+                        <label class="control-label">影像縮放</label>
+                        <input type="range" id="scale-slider" class="slider" min="0.7" max="1.6" step="0.01" value="1">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">上下位移</label>
+                        <input type="range" id="y-slider" class="slider" min="-80" max="80" step="1" value="0">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">左右位移</label>
+                        <input type="range" id="x-slider" class="slider" min="-80" max="80" step="1" value="0">
+                    </div>
+                </div>
+
+                <!-- 基準線調整卡 -->
+                <div id="panel-baseline" class="card">
+                    <div class="card-title">基準線調整</div>
+                    <div class="control-group mt-3">
+                        <label class="control-label">瀏海基準線位置 (高低)</label>
+                        <input type="range" id="base-pos-slider" class="slider slider-green" min="35" max="65" step="1" value="48">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">瀏海水平寬度 (同步縮放)</label>
+                        <input type="range" id="base-width-slider" class="slider slider-purple" min="180" max="380" step="1" value="260">
+                    </div>
+                </div>
+
+                <!-- 難度卡 -->
+                <div id="panel-game-difficulty" class="card hidden">
+                    <div class="card-title">難度</div>
+                    <div class="stars-container mt-2">
+                        <span class="star active">★</span><span class="star active">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                    </div>
+                </div>
+
+                <!-- 挑戰狀態卡 -->
+                <div id="panel-game-status" class="card hidden">
+                    <div class="card-title">挑戰狀態</div>
+                    <div class="scissors-container mt-2">
+                        <span class="scissor-icon active" id="scis-1">✂</span>
+                        <span class="scissor-icon active" id="scis-2">✂</span>
+                        <span class="scissor-icon active" id="scis-3">✂</span>
+                    </div>
+                    <button class="btn-reset" onclick="resetBangsGame()">重新挑戰</button>
+                </div>
+
+                <!-- 獎項總覽卡 -->
+                <div id="panel-lottery" class="card">
+                    <div class="card-title">獎項總覽</div>
+                    <div class="lottery-carousel">
+                        <div class="lottery-blur-mask"></div>
+                        <div class="lottery-track" id="lottery-track">
+                            <div class="lottery-item">哈根達斯 $150 摺價券</div>
+                            <div class="lottery-item">星巴克特選咖啡券</div>
+                            <div class="lottery-item">超商 $50 折價券</div>
+                            <div class="lottery-item">麥當勞套餐兌換券</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右側相機與剪髮主畫布 -->
+            <div class="canvas-area flex-1 flex flex-col justify-between" id="bangs-interactive-stage">
+                <div class="stage-container flex-1" id="stage-container">
+                    
+                    <div class="camera-container photo-stage-full" id="camera-box">
+                        <video id="video-stream" autoplay playsinline muted></video>
+                        <canvas id="capture-canvas" style="display:none;"></canvas>
+                        <img id="captured-image" class="hidden" alt="captured face">
+                        <div id="countdown-display" class="countdown-overlay hidden">3</div>
+                    </div>
+
+                    <div class="forehead-box photo-stage-large-box" id="forehead-box">( 請將額頭對準定位框 )</div>
+                    <div class="green-base-line" id="green-base-line"></div>
+
+                    <!-- 頭髮剪髮觸控層 -->
+                    <div class="hair-game-layer hidden" id="hair-game-layer">
+                        <svg style="position: absolute; width: 100%; height: 100%;">
+                            <path id="hair-top-arc-path" d="" fill="none" stroke-width="6" stroke-linecap="round"/>
+                        </svg>
+                        <div id="strands-container"></div>
+                    </div>
+                </div>
+
+                <!-- 水晶控制按鈕 -->
+                <div class="flex justify-center mb-6 z-20">
+                    <button class="crystal-btn" id="bangs-main-action-btn" onclick="handleBangsMainAction()">開始拍攝</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!--  5. 遊戲 2 畫面：時尚記憶力大考驗 (MEMORY DRESS-UP GAME) -->
+        <!-- ============================================ -->
+        <div id="view-game-memory" class="w-full h-full flex flex-col items-center justify-between z-10 hidden">
+            <!-- 說明卡蓋層 -->
+            <div id="memory-intro-overlay" class="absolute inset-0 bg-slate-950/95 z-50 flex justify-center items-center rounded-2xl">
+                <div class="glass-card max-w-xl p-8 text-center border-2 border-pink-500/30 shadow-[0_0_40px_rgba(236,72,153,0.2)]">
+                    <div class="text-3xl font-black mb-6 tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-white to-pink-400">🧠 骨感時尚記憶大考驗 👑</div>
+                    <div class="text-left space-y-4 text-slate-300 font-semibold mb-6">
+                        <div class="flex items-center gap-3"><span class="bg-cyan-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>遊戲開始有 <strong class="text-pink-400">10 秒鐘</strong> 快速記住骷髏模特兒身上的搭配。</div>
+                        <div class="flex items-center gap-3"><span class="bg-cyan-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>隨後配件會隱藏，並在右側圓框內開始快速旋轉。</div>
+                        <div class="flex items-center gap-3"><span class="bg-cyan-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>請在限時 <strong class="text-pink-400">25 秒內</strong> 點擊圓框，還原記憶中的經典穿搭！</div>
+                        <div class="flex items-center gap-3"><span class="bg-cyan-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">4</span>選對配件直接綠框鎖定，選錯會繼續旋轉，祝您奪下大獎！</div>
+                    </div>
+                    <button class="crystal-btn btn-neon-pulse" onclick="startMemoryGame()">開始挑戰</button>
+                </div>
+            </div>
+
+            <!-- 頂部狀態列 -->
+            <div class="flex justify-between items-center w-full max-w-3xl px-4 mt-2">
+                <div class="glass-card px-5 py-2 flex items-center gap-3 border border-pink-500/20">
+                    <span id="memory-phase-title" class="text-pink-400 font-black">⏱️ 迅速記下這套穿搭:</span>
+                    <span id="memory-timer" class="text-white text-2xl font-black">10</span>
+                </div>
+                <div class="glass-card px-5 py-2 flex items-center gap-3 border border-cyan-500/20">
+                    <span class="text-cyan-400 font-black">🧩 已對齊配件:</span>
+                    <span id="memory-score" class="text-white text-2xl font-black">0 / 6</span>
+                </div>
+            </div>
+
+            <!-- 核心遊玩區域：左側黃金骨架穿戴舞台，右側選擇區 -->
+            <div class="flex flex-row w-full max-w-4xl flex-1 items-center justify-center gap-16 my-auto px-6">
+                <!-- 左側：黃金骨架穿戴舞台 -->
+                <div class="w-[380px] h-[480px] flex items-center justify-center bg-slate-900/90 rounded-[32px] border border-white/5 relative shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden">
+                    <div id="memorize-hint-banner" class="absolute top-4 left-1/2 -translate-x-1/2 bg-pink-600/90 border border-pink-400 text-white font-black px-5 py-2 rounded-full text-xs tracking-widest shadow-[0_0_15px_rgba(236,72,153,0.5)] z-40 hidden animate-pulse">
+                        👀 記住這套穿搭！
+                    </div>
+
+                    <div class="skeleton-stage">
+                        <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 220 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M82,45 C78,15 142,15 138,45 C138,56 132,71 126,71 L126,79 C126,81 120,83 110,83 C100,83 94,81 94,79 L94,71 C88,71 82,56 82,45 Z" fill="#ebd57c" stroke="#d5be61" stroke-width="1.5"/>
+                            <rect x="93" y="42" width="13" height="15" rx="6.5" fill="#1e293b"/>
+                            <rect x="114" y="42" width="13" height="15" rx="6.5" fill="#1e293b"/>
+                            <polygon points="110,58 106,65 114,65" fill="#1e293b"/>
+                            <line x1="101" y1="74" x2="101" y2="80" stroke="#1e293b" stroke-width="1.5"/>
+                            <line x1="106" y1="73" x2="106" y2="81" stroke="#1e293b" stroke-width="1.5"/>
+                            <line x1="110" y1="73" x2="110" y2="81" stroke="#1e293b" stroke-width="1.5"/>
+                            <line x1="114" y1="73" x2="114" y2="81" stroke="#1e293b" stroke-width="1.5"/>
+                            <line x1="119" y1="74" x2="119" y2="80" stroke="#1e293b" stroke-width="1.5"/>
+                            <rect x="106" y="83" width="8" height="130" rx="4" fill="#ebd57c"/>
+                            <path d="M84,110 L136,110" stroke="#ebd57c" stroke-width="7" stroke-linecap="round"/>
+                            <path d="M78,130 L142,130" stroke="#ebd57c" stroke-width="7" stroke-linecap="round"/>
+                            <path d="M74,152 L146,152" stroke="#ebd57c" stroke-width="7" stroke-linecap="round"/>
+                            <path d="M78,175 L142,175" stroke="#ebd57c" stroke-width="7" stroke-linecap="round"/>
+                            <path d="M84,198 L136,198" stroke="#ebd57c" stroke-width="7" stroke-linecap="round"/>
+                            <circle cx="110" cy="225" r="14" fill="#ebd57c" stroke="#d5be61" stroke-width="2"/>
+                            <circle cx="98" cy="225" r="8" fill="#ebd57c"/>
+                            <circle cx="122" cy="225" r="8" fill="#ebd57c"/>
+                            <path d="M76,105 L52,150 L42,200" stroke="#ebd57c" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M144,105 L168,150 L178,200" stroke="#ebd57c" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M95,235 L90,280 L90,325" stroke="#ebd57c" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M125,235 L130,280 L130,325" stroke="#ebd57c" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <!-- 動態穿戴服飾層 -->
+                        <div id="pos-hat" class="fit-layer"></div>
+                        <div id="pos-accessory" class="fit-layer"></div>
+                        <div id="pos-top" class="fit-layer"></div>
+                        <div id="pos-bottom" class="fit-layer"></div>
+                        <div id="pos-bag" class="fit-layer"></div>
+                        <div id="pos-shoes" class="fit-layer flex justify-between px-[14px]">
+                            <div class="left-foot w-10 h-10"></div>
+                            <div class="right-foot w-10 h-10 -scale-x-100"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：2x3 圓形轉盤選擇區 -->
+                <div class="w-1/2 flex flex-col justify-center items-center">
+                    <div class="grid grid-cols-3 gap-x-8 gap-y-10 w-full max-w-md">
+                        <!-- 1. 頭飾 -->
+                        <div class="flex flex-col items-center gap-2">
+                            <button id="slot-hat" onclick="handleSlotClick('hat')" class="option-circle w-24 h-24 rounded-full flex items-center justify-center cursor-not-allowed opacity-50 shadow-lg p-2 overflow-hidden transition-all duration-300">
+                                <div id="slot-emoji-hat" class="w-full h-full"></div>
+                            </button>
+                            <span class="text-slate-300 font-bold text-sm tracking-wider">頭飾</span>
+                        </div>
+
+                        <!-- 2. 配飾 -->
+                        <div class="flex flex-col items-center gap-2">
+                            <button id="slot-accessory" onclick="handleSlotClick('accessory')" class="option-circle w-24 h-24 rounded-full flex items-center justify-center cursor-not-allowed opacity-50 shadow-lg p-2 overflow-hidden transition-all duration-300">
+                                <div id="slot-emoji-accessory" class="w-full h-full"></div>
+                            </button>
+                            <span class="text-slate-300 font-bold text-sm tracking-wider">配飾</span>
+                        </div>
+
+                        <!-- 3. 上衣 -->
+                        <div class="flex flex-col items-center gap-2">
+                            <button id="slot-top" onclick="handleSlotClick('top')" class="option-circle w-24 h-24 rounded-full flex items-center justify-center cursor-not-allowed opacity-50 shadow-lg p-2 overflow-hidden transition-all duration-300">
+                                <div id="slot-emoji-top" class="w-full h-full"></div>
+                            </button>
+                            <span class="text-slate-300 font-bold text-sm tracking-wider">上衣</span>
+                        </div>
+
+                        <!-- 4. 下著 -->
+                        <div class="flex flex-col items-center gap-2">
+                            <button id="slot-bottom" onclick="handleSlotClick('bottom')" class="option-circle w-24 h-24 rounded-full flex items-center justify-center cursor-not-allowed opacity-50 shadow-lg p-2 overflow-hidden transition-all duration-300">
+                                <div id="slot-emoji-bottom" class="w-full h-full"></div>
+                            </button>
+                            <span class="text-slate-300 font-bold text-sm tracking-wider">下著</span>
+                        </div>
+
+                        <!-- 5. 鞋子 -->
+                        <div class="flex flex-col items-center gap-2">
+                            <button id="slot-shoes" onclick="handleSlotClick('shoes')" class="option-circle w-24 h-24 rounded-full flex items-center justify-center cursor-not-allowed opacity-50 shadow-lg p-2 overflow-hidden transition-all duration-300">
+                                <div id="slot-emoji-shoes" class="w-full h-full"></div>
+                            </button>
+                            <span class="text-slate-300 font-bold text-sm tracking-wider">鞋子</span>
+                        </div>
+
+                        <!-- 6. 手提 -->
+                        <div class="flex flex-col items-center gap-2">
+                            <button id="slot-bag" onclick="handleSlotClick('bag')" class="option-circle w-24 h-24 rounded-full flex items-center justify-center cursor-not-allowed opacity-50 shadow-lg p-2 overflow-hidden transition-all duration-300">
+                                <div id="slot-emoji-bag" class="w-full h-full"></div>
+                            </button>
+                            <span class="text-slate-300 font-bold text-sm tracking-wider">手提</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-slate-500 text-xs font-semibold mb-2">
+                記憶穿搭挑戰：專注記住模特兒身上的潮流穿搭，迅速點擊圓框配對還原！
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!--  6. 遊戲 3 畫面：氣球狙擊手 v3(6) 完全套用版 -->
+        <!-- ============================================ -->
+        <div id="view-game-sniper" class="w-full h-full flex flex-col justify-between bg-[#e3fafc] relative overflow-hidden rounded-2xl z-10 hidden">
+            <div id="sniper-intro-overlay" class="absolute inset-0 bg-slate-950/95 z-50 flex justify-center items-center rounded-2xl">
+                <div class="glass-card max-w-xl p-10 text-center border-2 border-yellow-500/30 shadow-[0_0_40px_rgba(234,179,8,0.2)]">
+                    <div class="text-5xl font-black mb-8 tracking-wider text-[#7dd3fc] drop-shadow-[0_0_15px_rgba(125,211,252,0.5)]">氣球狙擊手</div>
+                    <div class="space-y-6 text-slate-200 font-bold text-lg mb-8 leading-relaxed">
+                        <p>左右移動準心並點擊螢幕發射子彈，擊中飄浮在空中的繽紛氣球</p>
+                        <p><span class="text-[#f87171] font-extrabold">避開 炸彈</span>，一旦射中炸彈可是會被扣分喔！</p>
+                        <p>在有限的 <span class="text-[#f472b6] font-extrabold">15 秒</span> 內爭取最高積分，可善用「道具」</p>
+                    </div>
+                    <button class="crystal-btn btn-neon-pulse" onclick="startSniperGame()">開始狙擊</button>
+                </div>
+            </div>
+
+            <!-- 氣球與大砲戰鬥主舞台 -->
+            <div id="game-stage" class="relative flex-1 bg-[#e3fafc] overflow-hidden cursor-none">
+                <!-- 頂部資訊列 -->
+                <div class="absolute top-4 left-0 right-0 px-6 flex items-center justify-between z-20">
+                    <!-- 左側：子彈狀態 -->
+                    <div class="flex items-center gap-3 bg-white/40 backdrop-blur-sm rounded-full px-4 py-1.5 border border-white/60 shadow-sm">
+                        <div id="bullet-icons-container" class="flex gap-1.5">
+                            <div class="bullet-icon w-2.5 h-6 bg-[#2d2d2d] rounded-t-full relative border border-black/20 shadow-sm transition-all duration-200">
+                                <div class="absolute bottom-0 w-full h-1.5 bg-[#404040] rounded-b-sm"></div>
+                            </div>
+                            <div class="bullet-icon w-2.5 h-6 bg-[#2d2d2d] rounded-t-full relative border border-black/20 shadow-sm transition-all duration-200">
+                                <div class="absolute bottom-0 w-full h-1.5 bg-[#404040] rounded-b-sm"></div>
+                            </div>
+                            <div class="bullet-icon w-2.5 h-6 bg-[#2d2d2d] rounded-t-full relative border border-black/20 shadow-sm transition-all duration-200">
+                                <div class="absolute bottom-0 w-full h-1.5 bg-[#404040] rounded-b-sm"></div>
+                            </div>
+                            <div class="bullet-icon w-2.5 h-6 bg-[#2d2d2d] rounded-t-full relative border border-black/20 shadow-sm transition-all duration-200">
+                                <div class="absolute bottom-0 w-full h-1.5 bg-[#404040] rounded-b-sm"></div>
+                            </div>
+                            <div class="bullet-icon w-2.5 h-6 bg-[#2d2d2d] rounded-t-full relative border border-black/20 shadow-sm transition-all duration-200">
+                                <div class="absolute bottom-0 w-full h-1.5 bg-[#404040] rounded-b-sm"></div>
+                            </div>
+                        </div>
+                        <span id="bullet-ratio-txt" class="text-sm font-black text-slate-600 tracking-wider">5/5</span>
+                    </div>
+                    
+                    <!-- 中間：15S計時條 -->
+                    <div class="flex items-center gap-3 flex-1 max-w-[50%] justify-center">
+                        <div class="w-full bg-slate-600/30 h-6 rounded-full overflow-hidden border border-white/60 p-[2px] shadow-inner">
+                            <div id="timer-bar" class="bg-red-500 h-full rounded-full transition-all duration-100 ease-linear" style="width: 100%;"></div>
+                        </div>
+                        <span id="timer-text" class="text-slate-700 font-black text-base sm:text-lg w-12 text-left">15S</span>
+                    </div>
+
+                    <!-- 右側：使用者頭像 -->
+                    <div class="w-10 h-10 bg-slate-300 rounded-full border border-white flex items-center justify-center shadow-sm">
+                        <svg class="w-6 h-6 text-slate-600" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.94.56 3.75 1.5 5.28l.05.07c.2.3.4.58.62.85l.13.15c.34.38.71.74 1.12 1.05l.17.13c.47.34.97.64 1.51.87l.11.04C8.61 20.89 10.25 21 12 21s3.39-.11 4.79-.58l.11-.04c.54-.23 1.04-.53 1.51-.87l.17-.13c.41-.31.78-.67 1.12-1.05l.13-.15c.22-.27.42-.55.62-.85l.05-.07C21.44 15.75 22 13.94 22 12c0-5.52-4.48-10-10-10zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 12.2c-2.7 0-5.8-1.29-6-1.56.32-.47.8-.82 1.36-.97.94-.25 2.15-.47 4.64-.47 2.48 0 3.69.22 4.64.47.56.15 1.04.5 1.36.97-.2.27-3.3 1.56-6 1.56z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 氣球與炸彈漂浮容器 -->
+                <div id="balloon-container" class="absolute inset-0 pointer-events-none"></div>
+
+                <!-- 實體子彈容器 -->
+                <div id="projectiles-container" class="absolute inset-0 pointer-events-none z-10"></div>
+
+                <!-- 特效與破裂、中獎文字容器 -->
+                <div id="effects-container" class="absolute inset-0 pointer-events-none z-10"></div>
+
+                <!-- 十字瞄準線 -->
+                <div id="custom-crosshair" class="absolute pointer-events-none z-40 -translate-x-1/2 -translate-y-1/2 select-none" style="left: -100px; top: -100px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2V22M2 12H22" stroke="black" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <!-- 浮動文字通知 -->
+                <div id="game-toast" class="absolute inset-0 flex items-center justify-center pointer-events-none z-30 opacity-0 transition-all duration-300 scale-50">
+                    <div class="bg-slate-900/90 text-white border-4 border-sky-400 rounded-2xl px-8 py-4 text-center shadow-2xl">
+                        <h2 id="toast-title" class="text-xl sm:text-2xl font-black text-sky-400 tracking-wider"></h2>
+                        <p id="toast-desc" class="text-xs sm:text-sm mt-1 text-slate-300"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 下部操控儀表板區域 -->
+            <div class="h-[28%] bg-[#081d36] border-t-8 border-[#0d2a4a] relative px-6 flex items-center justify-between z-20 gap-4">
+                <!-- 【左側區域：道具說明 + 綠色按鈕 + 紅色停止按鈕】 -->
+                <div class="flex items-center gap-4 h-full py-1 z-30">
+                    <!-- 道具說明看板 -->
+                    <div class="flex items-center justify-center h-full">
+                        <div class="border-2 border-dashed border-sky-400/50 rounded-xl px-3 py-1 bg-[#0a2340] text-white flex flex-col justify-center gap-1 h-[90%] text-[10px] min-w-[140px] max-w-[150px]">
+                            <div class="text-center font-bold text-sky-300 border-b border-sky-400/20 pb-0.5 tracking-wider mb-1">道具說明</div>
+                            <div class="flex flex-col gap-1 font-semibold">
+                                <div class="flex items-center justify-between">
+                                    <span class="flex items-center gap-0.5"><span class="text-teal-400">⏳</span> 時間</span>
+                                    <span class="text-sky-300 font-bold">+3</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="flex items-center gap-0.5"><span class="text-slate-400">🔋</span> 子彈</span>
+                                    <span class="text-sky-300 font-bold">+5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 道具按鈕（綠色） -->
+                    <button id="btn-item" class="w-14 h-14 bg-[#2ecc71] border-4 border-[#27ae60] active:scale-95 rounded-full flex items-center justify-center shadow-lg hover:bg-[#2feb7b] transition-all cursor-pointer text-white font-black text-sm tracking-wider">
+                        道具
+                    </button>
+
+                    <!-- 停止按鈕（紅色） -->
+                    <button id="btn-stop" class="w-14 h-14 bg-[#e74c3c] border-4 border-[#c0392b] active:scale-95 rounded-full flex items-center justify-center shadow-lg hover:bg-[#ff5c4c] transition-all cursor-pointer text-white font-black text-sm tracking-wider">
+                        停止
+                    </button>
+                </div>
+
+                <!-- 【正中間：發射大砲】 -->
+                <div class="absolute left-1/2 bottom-0 -translate-x-1/2 w-36 h-full flex flex-col justify-end items-center pointer-events-none z-10">
+                    <!-- 旋轉大砲 -->
+                    <div id="turret-barrel" class="w-16 h-24 bg-[#7f8c8d] border-t-2 border-l-2 border-r-2 border-[#5c6465] origin-bottom transition-all duration-75 relative flex justify-center shadow-md" style="transform: rotate(0deg); clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);">
+                        <div class="absolute top-0 w-full h-4 bg-[#34495e]"></div>
+                    </div>
+                    <!-- 大砲底座 -->
+                    <div class="w-22 h-6 bg-[#2c3e50] border-t border-slate-600 rounded-t-md relative shadow-inner"></div>
+                </div>
+
+                <!-- 【右側：目前積分】 -->
+                <div class="flex flex-col items-center justify-center z-20">
+                    <div class="bg-slate-300 border-2 border-slate-400 rounded-xl px-2 py-1 flex flex-col items-center shadow-md min-w-[95px]">
+                        <span class="text-[10px] text-slate-600 font-black mb-0.5">目前積分</span>
+                        <div class="bg-white w-full py-1.5 px-2 rounded-lg border border-slate-300 text-center shadow-inner">
+                            <span id="score-text" class="text-lg font-black text-slate-800 tracking-tight">0分</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 實體吐票槽 ==================== -->
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-2 bg-black rounded-t-full border-t border-slate-700 flex justify-center z-30">
+                <div id="ticket-dispenser" class="relative w-36 h-full bg-black"></div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!--  7. 三大遊戲共用結果蓋台結算彈窗 -->
+        <!-- ============================================ -->
+        <div class="result-overlay hidden" id="global-result-overlay">
+            
+            <!-- 預設舊型結算卡片 (剪髮挑戰、穿搭挑戰專用) -->
+            <div id="default-result-card" class="flex flex-col items-center justify-center text-center max-w-xl">
+                <!-- 頂部標題：評 分 結 果 -->
+                <h2 class="text-5xl font-black tracking-[0.3em] text-white drop-shadow-[0_4px_12px_rgba(255,255,255,0.4)] mb-2 uppercase">評 分 結 果</h2>
+                <!-- 副標題 -->
+                <p id="global-result-subtitle" class="text-xl font-bold text-amber-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] mb-8">恭喜成功還原 6 樣配件</p>
+                
+                <!-- 虛線卡片外框 -->
+                <div class="w-[520px] bg-slate-900/80 border-2 border-dashed border-slate-700 rounded-[32px] p-10 flex flex-col items-center relative overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.6)]">
+                    <!-- 星軌裝飾 -->
+                    <div class="absolute bottom-6 left-6 opacity-45">
+                        <svg class="w-12 h-12 text-yellow-500/60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 50 C15 25, 75 25, 75 50 C75 75, 15 75, 15 50" stroke="currentColor" stroke-width="3" stroke-dasharray="6 6" />
+                            <path d="M20 65 C40 85, 90 60, 75 40" stroke="currentColor" stroke-width="3" />
+                            <polygon points="25,30 28,37 35,38 30,43 32,50 25,46 18,50 20,43 15,38 22,37" fill="currentColor" />
+                        </svg>
+                    </div>
+                    
+                    <span class="bg-slate-950/90 text-amber-400 font-extrabold px-6 py-1.5 rounded-full text-xs tracking-widest border border-slate-800 shadow-md mb-6">CONGRATULATIONS</span>
+                    
+                    <h3 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-300 drop-shadow-[0_0_20px_rgba(255,0,160,0.85)] py-4 tracking-wider">
+                        請記得取走您的禮券！
+                    </h3>
+                </div>
+            </div>
+
+            <!-- 【氣球狙擊手專用高還原度結算卡片】 -->
+            <div id="sniper-result-card" class="hidden relative flex flex-col items-center justify-center max-w-lg w-[480px]">
+                <!-- 頂部藍色膠囊膠貼 -->
+                <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-50">
+                    <div class="bg-[#009beb] text-white font-black text-xl px-10 py-3.5 rounded-full border-[5px] border-white shadow-[0_4px_15px_rgba(0,155,235,0.4)] tracking-widest min-w-[200px] text-center">
+                        結 算 機 台
+                    </div>
+                </div>
+
+                <!-- 白色大卡片本體 -->
+                <div class="bg-[#f4f8fb] text-slate-800 rounded-[36px] w-full pt-14 pb-8 px-8 flex flex-col items-center shadow-2xl border-2 border-[#b8c9dd]/80">
+                    
+                    <!-- 金黃立體 3D 星星圖標 -->
+                    <div class="relative w-28 h-28 flex items-center justify-center mb-4">
+                        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-[0_6px_12px_rgba(234,179,8,0.4)]">
+                            <!-- 星星外放射發光小線條 -->
+                            <path d="M76 26 L81 20 M83 30 L89 28" stroke="#facc15" stroke-width="4.5" stroke-linecap="round"/>
+                            <path d="M24 26 L19 20 M17 30 L11 28" stroke="#facc15" stroke-width="4.5" stroke-linecap="round"/>
+                            <!-- 周圍亮晶晶小圓點 -->
+                            <circle cx="50" cy="18" r="3.5" fill="#facc15"/>
+                            <circle cx="78" cy="46" r="3" fill="#facc15"/>
+                            <circle cx="22" cy="46" r="3" fill="#facc15"/>
+                            <circle cx="68" cy="74" r="3.5" fill="#facc15"/>
+                            <circle cx="32" cy="74" r="3.5" fill="#facc15"/>
+                            <!-- 立體感漸層黃金星星 -->
+                            <polygon points="50,18 61,38 83,41 68,57 72,79 50,69 28,79 32,57 17,41 39,38" fill="url(#goldGrad)" stroke="#d97706" stroke-width="1.5" stroke-linejoin="round"/>
+                            <!-- 內層高光弧度 -->
+                            <path d="M50 24 L58 40 L78 42 L64 55" stroke="#fff" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.6"/>
+                            <defs>
+                                <radialGradient id="goldGrad" cx="50%" cy="40%" r="55%">
+                                    <stop offset="0%" stop-color="#fffdf0" />
+                                    <stop offset="35%" stop-color="#facc15" />
+                                    <stop offset="100%" stop-color="#ca8a04" />
+                                </radialGradient>
+                            </defs>
+                        </svg>
+                    </div>
+
+                    <!-- "挑戰成功！" 標題 -->
+                    <h3 class="text-3xl font-black text-[#1e293b] tracking-wider mb-3">挑戰成功！</h3>
+
+                    <!-- 描述文字 -->
+                    <p class="text-[#475569] font-semibold text-center text-base mb-6 leading-relaxed px-2">
+                        太棒了！你擊落許多氣球，獲得了 <span id="sniper-result-score-desc" class="font-black text-slate-800">25</span> 分！
+                    </p>
+
+                    <!-- 雙欄目前積分與彩票卡 -->
+                    <div class="bg-white border border-[#e2e8f0] rounded-[24px] w-full py-5 px-6 flex justify-between items-center mb-6 shadow-sm">
+                        <!-- 目前積分 -->
+                        <div class="flex-1 text-center border-r border-[#e2e8f0]">
+                            <div class="text-[#64748b] font-bold text-sm mb-1 tracking-wider">目前積分</div>
+                            <div id="sniper-result-score-val" class="text-[#0091ff] font-black text-3xl tracking-tight">25分</div>
+                        </div>
+                        <!-- 獲得彩票 -->
+                        <div class="flex-1 text-center">
+                            <div class="text-[#64748b] font-bold text-sm mb-1 tracking-wider">獲得彩票</div>
+                            <div id="sniper-result-ticket-val" class="text-[#eab308] font-black text-3xl tracking-tight">1張</div>
+                        </div>
+                    </div>
+
+                    <!-- 底部綠色出票提示框 -->
+                    <div class="bg-[#ecfdf5] border border-[#a7f3d0] rounded-2xl w-full py-3.5 px-4 flex items-center justify-center gap-2 shadow-sm">
+                        <span class="text-pink-500 text-lg">🎟️</span>
+                        <span class="text-[#065f46] font-extrabold text-sm tracking-wide">
+                            實體彩票已從底部吐票口滑出，記得撕下帶走喔！
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================ -->
+    <!--  8. 整合所有核心互動之 JavaScript 程式碼 -->
+    <!-- ============================================ -->
+    <script>
+        let activeGame = ""; 
+        let activePrice = 100;
+
+        // 相機與照片共用狀態
+        let bangsState = 'CAMERA'; 
+        let remainingChances = 3;
+        const totalStrands = 36; 
+        let hairCurrentLengths = []; 
+        let hairStartPoints = []; 
+        let isDrawing = false;
+        let isCountingDown = false;
+        let streamObj = null;
+
+        const videoStream = document.getElementById('video-stream');
+        const capturedImage = document.getElementById('captured-image');
+        const captureCanvas = document.getElementById('capture-canvas');
+        const cameraBox = document.getElementById('camera-box');
+        const foreheadBox = document.getElementById('forehead-box');
+        const greenBaseLine = document.getElementById('green-base-line');
+        const hairGameLayer = document.getElementById('hair-game-layer');
+        const strandsContainer = document.getElementById('strands-container');
+        const topArcPath = document.getElementById('hair-top-arc-path');
+        const mainActionBtn = document.getElementById('bangs-main-action-btn');
+        const lotteryTrack = document.getElementById('lottery-track');
+        const stageContainer = document.getElementById('stage-container');
+        const countdownDisplay = document.getElementById('countdown-display');
+        const leftPanel = document.getElementById('bangs-left-panel');
+
+        // 氣球狙擊手狀態變量
+        let gameStage, balloonContainer, projectileContainer, effectsContainer, turretBarrel, customCrosshair;
+        let bulletIcons, bulletRatioTxt, scoreText, timerBar, timerText;
+        let btnItem, btnStop, ticketDispenser;
+        let toastEl, toastTitle, toastDesc;
+
+        const SNIPER_DURATION = 15;
+        let sniperTimeRemaining = SNIPER_DURATION;
+        let sniperScore = 0;
+        let sniperBullets = 5;
+        let isSniperPlaying = false;
+        let sniperHasUsedTimeBonus = false;
+        let sniperTimerInterval = null;
+        let sniperSpawnInterval = null;
+        let sniperAnimationFrameId = null;
+
+        let sniperGameObjects = []; 
+        let sniperActiveProjectiles = [];
+
+        const SNIPER_BALLOON_TYPES = [
+            { color: '#ff7675', border: '#d63031', bonusType: 'balloon', label: '🎈' },
+            { color: '#74b9ff', border: '#0984e3', bonusType: 'score', label: '✨' },
+            { color: '#ffeaa7', border: '#fdcb6e', bonusType: 'score', label: '🌟' }
+        ];
+
+        // 穿搭記憶大考驗數據庫
+        const categories = {
+            hat: {
+                name: '頭飾',
+                items: [0, 1, 2, 3, 4, 5],
+                getSVG: (idx) => {
+                    const svgs = [
+                        `<svg viewBox="0 0 100 100" fill="none" class="w-full h-full"><path d="M20 70 H80 L75 75 H25 Z" fill="#475569" /><rect x="30" y="25" width="40" height="45" rx="4" fill="#1e293b" /><rect x="30" y="60" width="40" height="7" fill="#ef4444" /><path d="M15 70 C15 70 50 64 85 70 L80 75 H20 Z" fill="#0f172a" /></svg>`,
+                        `<svg viewBox="0 0 100 100" fill="none" class="w-full h-full"><path d="M15 60 C30 50 70 50 85 60 C95 65 75 70 50 70 C25 70 5 65 15 60 Z" fill="#b45309" stroke="#78350f" stroke-width="2"/><path d="M32 60 C32 25 42 20 50 30 C58 20 68 25 68 60 Z" fill="#d97706" stroke="#78350f" stroke-width="2"/><path d="M32 52 C45 55 55 55 68 52" stroke="#f59e0b" stroke-width="4"/></svg>`,
+                        `<svg viewBox="0 0 100 100" fill="none" class="w-full h-full"><path d="M20 70 L25 35 L40 55 L50 25 L60 55 L75 35 L80 70 Z" fill="#fbbf24" stroke="#d97706" stroke-width="2.5" stroke-linejoin="round"/><rect x="25" y="62" width="50" height="8" fill="#d97706" /><circle cx="50" cy="25" r="4" fill="#ef4444" /><circle cx="25" cy="35" r="3" fill="#3b82f6" /><circle cx="75" cy="35" r="3" fill="#3b82f6" /><circle cx="35" cy="66" r="2" fill="#fff" /><circle cx="50" cy="66" r="2" fill="#fff" /><circle cx="65" cy="66" r="2" fill="#fff" /></svg>`,
+                        `<svg viewBox="0 0 100 100" fill="none" class="w-full h-full"><path d="M30 60 C30 35 70 35 70 60 H30 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/><path d="M60 55 C72 55 88 62 88 68 C88 70 55 68 55 60" fill="#1d4ed8" /><circle cx="50" cy="38" r="3" fill="#fff" /></svg>`,
+                        `<svg viewBox="0 0 100 100" fill="none" class="w-full h-full"><ellipse cx="50" cy="55" rx="35" ry="15" fill="#ec4899" stroke="#be185d" stroke-width="2"/><path d="M50 40 L50 32" stroke="#be185d" stroke-width="3" stroke-linecap="round"/></svg>`,
+                        `<svg viewBox="0 0 100 100" fill="none" class="w-full h-full"><path d="M15 70 C30 65 70 65 85 70 L75 75 H25 Z" fill="#4c1d95" stroke="#31106a" stroke-width="2"/><path d="M30 68 L50 15 L70 68 Z" fill="#6d28d9" stroke="#31106a" stroke-width="2" stroke-linejoin="round"/><polygon points="50,45 47,52 54,48 46,48 53,52" fill="#fbbf24" /><rect x="34" y="60" width="32" height="8" fill="#f59e0b" /></svg>`
+                    ];
+                    return svgs[idx];
+                }
+            },
+            accessory: {
+                name: '配飾',
+                items: [0, 1, 2, 3, 4, 5],
+                getSVG: (idx) => {
+                    const svgs = [
+                        `<svg viewBox="0 0 100 40" fill="none" class="w-full h-full"><path d="M15 15 C15 28 38 28 38 15 Z" fill="#0f172a" stroke="#fff" stroke-width="1.5"/><path d="M62 15 C62 28 85 28 85 15 Z" fill="#0f172a" stroke="#fff" stroke-width="1.5"/><line x1="38" y1="13" x2="62" y2="13" stroke="#fff" stroke-width="2"/><line x1="38" y1="18" x2="62" y2="18" stroke="#fff" stroke-width="1"/></svg>`,
+                        `<svg viewBox="0 0 100 40" fill="none" class="w-full h-full"><rect x="10" y="8" width="80" height="24" rx="12" fill="rgba(6, 182, 212, 0.25)" stroke="#06b6d4" stroke-width="2.5" /><line x1="15" y1="20" x2="85" y2="20" stroke="#22d3ee" stroke-width="3" stroke-linecap="round"/><circle cx="20" cy="20" r="3" fill="#fff" /><circle cx="80" cy="20" r="3" fill="#fff" /></svg>`,
+                        `<svg viewBox="0 0 100 40" fill="none" class="w-full h-full"><circle cx="28" cy="20" r="14" fill="#78350f" stroke="#f59e0b" stroke-width="2.5" /><circle cx="72" cy="20" r="14" fill="#78350f" stroke="#f59e0b" stroke-width="2.5" /><line x1="42" y1="20" x2="58" y2="20" stroke="#f59e0b" stroke-width="3" /></svg>`,
+                        `<svg viewBox="0 0 100 40" fill="none" class="w-full h-full"><path d="M15 15 C15 7 35 7 35 18 C35 7 55 7 55 15 C55 28 35 34 35 34 C35 34 15 28 15 15 Z" fill="rgba(244, 63, 94, 0.4)" stroke="#f43f5e" stroke-width="2" transform="scale(0.6) translate(15, 5)"/><path d="M15 15 C15 7 35 7 35 18 C35 7 55 7 55 15 C55 28 35 34 35 34 C35 34 15 28 15 15 Z" fill="rgba(244, 63, 94, 0.4)" stroke="#f43f5e" stroke-width="2" transform="scale(0.6) translate(80, 5)"/><line x1="38" y1="18" x2="62" y2="18" stroke="#f43f5e" stroke-width="2"/></svg>`,
+                        `<svg viewBox="0 0 100 40" fill="none" class="w-full h-full"><polygon points="25,6 29,15 39,15 31,21 34,30 25,24 16,30 19,21 11,15 21,15" fill="rgba(168, 85, 247, 0.4)" stroke="#a855f7" stroke-width="2"/><polygon points="75,6 79,15 89,15 81,21 84,30 75,24 66,30 69,21 61,15 71,15" fill="rgba(168, 85, 247, 0.4)" stroke="#a855f7" stroke-width="2"/><line x1="39" y1="18" x2="61" y2="18" stroke="#a855f7" stroke-width="2"/></svg>`,
+                        `<svg viewBox="0 0 100 40" fill="none" class="w-full h-full"><circle cx="35" cy="20" r="14" fill="rgba(251, 191, 36, 0.1)" stroke="#fbbf24" stroke-width="2.5" /><path d="M49 20 C55 25 65 35 70 35 H90" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" fill="none"/></svg>`
+                    ];
+                    return svgs[idx];
+                }
+            },
+            top: {
+                name: '上衣',
+                items: [0, 1, 2, 3, 4, 5],
+                getSVG: (idx) => {
+                    const svgs = [
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M30 30 H90 L105 85 L90 85 L85 95 H35 L30 85 L15 85 Z" fill="#2563eb" stroke="#1d4ed8" stroke-width="2" /><path d="M45 30 L50 65 L35 95" stroke="#1e40af" stroke-width="2" /><path d="M75 30 L70 65 L85 95" stroke="#1e40af" stroke-width="2" /><rect x="52" y="38" width="16" height="57" fill="#1d4ed8" /><line x1="60" y1="45" x2="60" y2="90" stroke="#f59e0b" stroke-width="2" stroke-dasharray="2 3" /></svg>`,
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M25 30 H95 L105 85 L85 110 L60 85 L35 110 L15 85 Z" fill="#0f172a" stroke="#000" stroke-width="2" /><path d="M45 30 L60 65 L75 30" fill="#fff" /><polygon points="52,40 60,45 68,40 60,35" fill="#ef4444" /><path d="M45 30 L35 85 M75 30 L85 85" stroke="#334155" stroke-width="2" /></svg>`,
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M30 35 H90 L105 85 H85 V100 H35 V85 L15 85 Z" fill="#10b981" stroke="#047857" stroke-width="2" /><path d="M40 35 C40 20 80 20 80 35 Z" fill="#047857" /><rect x="48" y="70" width="24" height="20" rx="4" fill="#047857" /><path d="M54 35 L48 55 M66 35 L72 55" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`,
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M25 30 H95 L105 85 L90 95 H30 L15 85 Z" fill="#1e293b" stroke="#0f172a" stroke-width="2.5" /><path d="M25 30 L50 60 L30 95 M95 30 L70 60 L90 95" stroke="#475569" stroke-width="2" /><circle cx="35" cy="45" r="2" fill="#e2e8f0" /><circle cx="45" cy="55" r="2" fill="#e2e8f0" /><circle cx="85" cy="45" r="2" fill="#e2e8f0" /><circle cx="75" cy="55" r="2" fill="#e2e8f0" /></svg>`,
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M30 30 H90 L105 85 H85 V95 H35 V85 L15 85 Z" fill="#f59e0b" stroke="#b45309" stroke-width="2" /><rect x="18" y="45" width="84" height="8" fill="#1e293b" /><rect x="18" y="65" width="84" height="8" fill="#1e293b" /><rect x="35" y="85" width="50" height="8" fill="#1e293b" /></svg>`,
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M35 45 C45 35 75 35 85 45 L100 85 H80 V95 H40 V85 L20 85 Z" fill="#d946ef" stroke="#a21caf" stroke-width="2" /><path d="M50 42 C55 50 65 50 70 42" stroke="#fff" stroke-width="2" fill="none" /></svg>`
+                    ];
+                    return svgs[idx];
+                }
+            },
+            bottom: {
+                name: '下著',
+                items: [0, 1, 2, 3, 4, 5],
+                getSVG: (idx) => {
+                    const svgs = [
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M35 15 H85 L90 100 H65 L60 45 L55 100 H30 Z" fill="#15803d" stroke="#166534" stroke-width="2" /><rect x="26" y="40" width="8" height="15" rx="2" fill="#166534" /><rect x="86" y="40" width="8" height="15" rx="2" fill="#166534" /><line x1="35" y1="28" x2="85" y2="28" stroke="#114e28" stroke-width="2.5" /></svg>`,
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M35 15 H85 L90 60 H62 L60 35 L58 60 H30 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2" /><path d="M38 42 H48 M72 42 H82" stroke="#fff" stroke-width="2" /><path d="M30 60 L35 65 M90 60 L85 65" stroke="#1d4ed8" stroke-width="2" /></svg>`,
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M40 15 H80 L95 75 H25 Z" fill="#ef4444" stroke="#991b1b" stroke-width="2" /><line x1="35" y1="15" x2="38" y2="75" stroke="#000" stroke-width="1.5" /><line x1="48" y1="15" x2="50" y2="75" stroke="#000" stroke-width="1.5" /><line x1="60" y1="15" x2="60" y2="75" stroke="#000" stroke-width="1.5" /><line x1="72" y1="15" x2="70" y2="75" stroke="#000" stroke-width="1.5" /><line x1="85" y1="15" x2="82" y2="75" stroke="#000" stroke-width="1.5" /></svg>`,
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M35 15 H85 L80 100 H63 L60 45 L57 100 H40 Z" fill="#1e293b" stroke="#0f172a" stroke-width="2" /><line x1="38" y1="40" x2="35" y2="70" stroke="#38bdf8" stroke-width="2" /><line x1="82" y1="40" x2="85" y2="70" stroke="#38bdf8" stroke-width="2" /></svg>`,
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M42 15 H78 L95 105 H25 Z" fill="#6366f1" stroke="#4338ca" stroke-width="2" stroke-linejoin="round"/><circle cx="45" cy="45" r="3" fill="#fbbf24" /><circle cx="75" cy="55" r="3" fill="#fbbf24" /><circle cx="55" cy="75" r="3" fill="#fbbf24" /><circle cx="35" cy="85" r="3" fill="#fbbf24" /></svg>`,
+                        `<svg viewBox="0 0 120 120" fill="none" class="w-full h-full"><path d="M35 15 H85 L90 100 H67 L60 40 L53 100 H30 Z" fill="#ec4899" stroke="#be185d" stroke-width="2" /><path d="M33 15 L28 100 M87 15 L92 100" stroke="#fff" stroke-width="2.5" /></svg>`
+                    ];
+                    return svgs[idx];
+                }
+            },
+            shoes: {
+                name: '鞋子',
+                items: [0, 1, 2, 3, 4, 5],
+                getSVG: (idx) => {
+                    const svgs = [
+                        `<svg viewBox="0 0 60 50" fill="none" class="w-full h-full"><path d="M10 40 L25 15 L45 15 L55 35 L50 45 L10 45 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.5" /><path d="M10 40 H50 L48 45 H10 Z" fill="#fff" /><line x1="30" y1="18" x2="40" y2="30" stroke="#fff" stroke-width="1.5" /><line x1="28" y1="24" x2="38" y2="35" stroke="#fff" stroke-width="1.5" /></svg>`,
+                        `<svg viewBox="0 0 60 50" fill="none" class="w-full h-full"><path d="M15 42 L20 10 L38 10 L38 30 L52 38 L50 45 L15 45 Z" fill="#1e293b" stroke="#000" stroke-width="2" /><rect x="12" y="42" width="40" height="4" rx="1" fill="#000" /><line x1="32" y1="15" x2="38" y2="15" stroke="#f59e0b" stroke-width="2" /><line x1="32" y1="22" x2="38" y2="22" stroke="#f59e0b" stroke-width="2" /></svg>`,
+                        `<svg viewBox="0 0 60 50" fill="none" class="w-full h-full"><path d="M8 38 L25 20 L48 20 L55 38 L48 44 L8 44 Z" fill="#111827" stroke="#22d3ee" stroke-width="2" /><path d="M8 40 L48 40" stroke="#e879f9" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+                        `<svg viewBox="0 0 60 50" fill="none" class="w-full h-full"><path d="M15 15 L32 38 L55 38 L48 44 L32 44 L25 25 L15 25 Z" fill="#ef4444" stroke="#991b1b" stroke-width="1.5" /><line x1="15" y1="15" x2="15" y2="45" stroke="#ef4444" stroke-width="2" /></svg>`,
+                        `<svg viewBox="0 0 60 50" fill="none" class="w-full h-full"><ellipse cx="32" cy="40" rx="22" ry="5" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" /><path d="M22 40 C22 30 42 30 42 40" stroke="#ef4444" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`,
+                        `<svg viewBox="0 0 60 50" fill="none" class="w-full h-full"><path d="M10 38 L25 22 L48 22 L52 35 L48 44 L10 44 Z" fill="#78350f" stroke="#451a03" stroke-width="2" /><path d="M15 40 H45" stroke="#451a03" stroke-width="1.5" /><circle cx="35" cy="28" r="1.5" fill="#fff" /></svg>`
+                    ];
+                    return svgs[idx];
+                }
+            },
+            bag: {
+                name: '手提',
+                items: [0, 1, 2, 3, 4, 5],
+                getSVG: (idx) => {
+                    const svgs = [
+                        `<svg viewBox="0 0 100 120" fill="none" class="w-full h-full"><path d="M50 15 L50 105" stroke="#475569" stroke-width="3" stroke-linecap="round"/><path d="M47 100 C47 110 57 110 57 100" stroke="#f59e0b" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M50 15 L32 85 C50 80 50 80 68 85 Z" fill="#ec4899" stroke="#be185d" stroke-width="2" stroke-linejoin="round"/><line x1="50" y1="15" x2="50" y2="81" stroke="#db2777" stroke-width="1.5" /></svg>`,
+                        `<svg viewBox="0 0 100 120" fill="none" class="w-full h-full"><rect x="20" y="45" width="60" height="42" rx="4" fill="#78350f" stroke="#451a03" stroke-width="2" /><path d="M40 45 V35 H60 V45" stroke="#451a03" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="38" cy="65" r="3" fill="#fbbf24" /><circle cx="62" cy="65" r="3" fill="#fbbf24" /><line x1="20" y1="58" x2="80" y2="58" stroke="#451a03" stroke-width="2" /></svg>`,
+                        `<svg viewBox="0 0 100 120" fill="none" class="w-full h-full"><line x1="50" y1="105" x2="50" y2="35" stroke="#b45309" stroke-width="4" stroke-linecap="round" /><path d="M35 22 C35 38 65 38 65 22 C65 10 35 10 35 22 Z" fill="#38bdf8" /><path d="M30 18 C30 42 70 42 70 18 C58 30 42 30 30 18" fill="#fbbf24" /></svg>`,
+                        `<svg viewBox="0 0 100 120" fill="none" class="w-full h-full"><path d="M30 60 L25 90 H75 L70 60 Z" fill="#10b981" stroke="#047857" stroke-width="2" stroke-linejoin="round"/><path d="M30 60 C30 35 70 35 70 60" stroke="#f59e0b" stroke-width="2.5" fill="none" stroke-dasharray="2 2" /><rect x="44" y="68" width="12" height="8" rx="1" fill="#fbbf24" /></svg>`,
+                        `<svg viewBox="0 0 100 120" fill="none" class="w-full h-full"><rect x="15" y="45" width="70" height="42" rx="6" fill="#334155" stroke="#1e293b" stroke-width="2.5" /><path d="M35 45 V37 H65 V45" stroke="#1e293b" stroke-width="4" fill="none" /><circle cx="32" cy="66" r="10" fill="#0f172a" stroke="#22d3ee" stroke-width="2" /><circle cx="68" cy="66" r="10" fill="#0f172a" stroke="#22d3ee" stroke-width="2" /><rect x="46" y="52" width="8" height="4" fill="#ef4444" /></svg>`,
+                        `<svg viewBox="0 0 100 120" fill="none" class="w-full h-full"><path d="M45 10 L45 92" stroke="#a855f7" stroke-width="4" stroke-linecap="round" /><path d="M45 10 L43 92" stroke="#fff" stroke-width="1.5" stroke-linecap="round" /><rect x="35" y="92" width="20" height="5" rx="1.5" fill="#f59e0b" /><rect x="42" y="97" width="6" height="15" fill="#1e293b" /></svg>`
+                    ];
+                    return svgs[idx];
+                }
+            }
+        };
+
+        // 時尚記憶大考驗狀態
+        let targetOutfit = {};
+        let playerOutfit = {};
+        let lockedSlots = {};
+        let slotIntervals = {};
+        let currentDisplayIdx = {};
+        let memoryPhase = 'IDLE'; 
+        let memoryTimerVal = 10;
+        let memoryTimerInterval = null;
+        let matchedPairs = 0;
+
+        // --------------------------------------------
+        //  新增：教學影片控制邏輯
+        // --------------------------------------------
+        function openVideoGuide() {
+            playSound('lobby-click'); // 播放大廳按鈕點擊音效
+            const modal = document.getElementById('video-guide-modal');
+            modal.classList.remove('hidden');
+            switchGuideVideo('bangs'); // 預設先看極限剪髮
+        }
+
+        function closeVideoGuide() {
+            playSound('lobby-click'); // 播放大廳按鈕點擊音效
+            const modal = document.getElementById('video-guide-modal');
+            const videoPlayer = document.getElementById('guide-video-player');
+            if (videoPlayer) {
+                videoPlayer.pause();
+            }
+            modal.classList.add('hidden');
+        }
+
+        function switchGuideVideo(gameType) {
+            playSound('lobby-click'); // 播放切換頁籤音效
+            const player = document.getElementById('guide-video-player');
+            const source = document.getElementById('guide-video-source');
+            const desc = document.getElementById('guide-video-desc');
+            
+            // 重設 Tab 按鈕樣式
+            ['bangs', 'memory', 'sniper'].forEach(type => {
+                const tab = document.getElementById(`tab-guide-${type}`);
+                if (tab) {
+                    tab.className = "px-4 py-2 rounded-lg text-sm font-bold bg-slate-800 text-slate-400 border border-transparent transition-all duration-200";
+                }
+            });
+            
+            // 點亮當前選中的 Tab
+            const activeTab = document.getElementById(`tab-guide-${gameType}`);
+            if (activeTab) {
+                activeTab.className = "px-4 py-2 rounded-lg text-sm font-bold bg-cyan-950/50 text-cyan-400 border border-cyan-500/30 transition-all duration-200 shadow-[0_0_10px_rgba(0,243,255,0.2)]";
+            }
+
+            let videoUrl = "";
+            let description = "";
+
+            if (gameType === 'bangs') {
+                // 極限剪髮挑戰專用示範影片
+                videoUrl = "./bangs-demo.mp4"; // 若要使用線上影片，可改成影片 URL
+                description = "📌 <strong>極限剪髮挑戰：</strong> 拍照後，拖曳左側拉桿微調相片大小及上下位置。接著在右側螢幕上用滑鼠拖曳或手指導航，對準綠色水平基準線，裁剪出完美齊瀏海！越貼近綠色虛線分數越高。";
+            } else if (gameType === 'memory') {
+                videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4";
+                description = "📌 <strong>時尚記憶大考驗：</strong> 遊戲開始有 10 秒鐘快速記住骷髏模特兒身上的衣服與配件。隨後點擊右側旋轉的圓圈，鎖定與剛才一模一樣的配件。在 25 秒內完美還原穿搭即可奪冠！";
+            } else if (gameType === 'sniper') {
+                videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4";
+                description = "📌 <strong>氣球狙擊手：</strong> 左右滑動準星，點擊畫面即可朝該方向射擊子彈。打中彩色氣球可獲取分數，避開黑色骷髏炸彈，限時 15 秒挑戰！多利用 [道具] 補給彈藥 and 時間。";
+            }
+
+            if (player && source) {
+                player.pause();
+                source.src = videoUrl;
+                player.load();
+                player.play().catch(e => console.log("Auto-play blocked, waiting for user interaction."));
+            }
+
+            if (desc) {
+                desc.innerHTML = description;
+            }
+        }
+
+        // --------------------------------------------
+        //  大廳與付款導航
+        // --------------------------------------------
+        function lobbySelectGame(gameName, price) {
+            playSound('lobby-click'); // 播放按鈕點擊音效
+            activeGame = gameName;
+            activePrice = price;
+
+            document.getElementById('pay-game-title').innerText = gameName === '時尚記憶對對碰' ? '時尚記憶大考驗' : gameName;
+            document.getElementById('pay-game-price').innerText = `$${price}`;
+
+            document.getElementById('view-lobby').classList.add('hidden');
+            document.getElementById('view-payment').classList.remove('hidden');
+            document.getElementById('global-home-btn').classList.remove('hidden');
+        }
+
+        function simulatePay(paymentMethod) {
+            playSound('pay-click'); // 播放確認付款點擊音效
+            document.getElementById('view-payment').classList.add('hidden');
+            document.getElementById('view-payment-processing').classList.remove('hidden');
+            document.getElementById('pay-loader').classList.remove('hidden');
+            document.getElementById('pay-success-check').classList.add('hidden');
+            document.getElementById('pay-status-text').innerText = `正在讀取 ${paymentMethod} 中，請稍候...`;
+
+            setTimeout(() => {
+                document.getElementById('pay-loader').classList.add('hidden');
+                document.getElementById('pay-success-check').classList.remove('hidden');
+                document.getElementById('pay-status-text').innerText = "交易付款成功！";
+                document.getElementById('pay-status-text').style.color = "var(--neon-green)";
+                playSound('pay-success'); // 播放「交易付款成功」的收銀與清脆叮叮音效
+
+                setTimeout(() => {
+                    document.getElementById('view-payment-processing').classList.add('hidden');
+                    document.getElementById('pay-status-text').style.color = "#ffffff"; 
+                    loadGame(activeGame);
+                }, 1500);
+            }, 2000);
+        }
+
+        function returnToLobby() {
+            playSound('lobby-click'); // 播放返回音效
+            stopAllRunningProcesses();
+
+            document.getElementById('view-payment').classList.add('hidden');
+            document.getElementById('view-payment-processing').classList.add('hidden');
+            document.getElementById('view-game-bangs').classList.add('hidden');
+            document.getElementById('view-game-memory').classList.add('hidden');
+            document.getElementById('view-game-sniper').classList.add('hidden');
+            document.getElementById('global-result-overlay').classList.add('hidden');
+            document.getElementById('global-home-btn').classList.add('hidden');
+
+            document.getElementById('view-lobby').classList.remove('hidden');
+        }
+
+        function loadGame(gameName) {
+            document.getElementById('global-home-btn').classList.remove('hidden');
+
+            if (gameName === '極限剪髮挑戰') {
+                document.getElementById('view-game-bangs').classList.remove('hidden');
+                document.getElementById('bangs-intro-overlay').classList.remove('hidden');
+                refreshBangsLayout();
+            } else if (gameName === '時尚記憶對對碰') {
+                document.getElementById('view-game-memory').classList.remove('hidden');
+                document.getElementById('memory-intro-overlay').classList.remove('hidden');
+            } else if (gameName === '氣球狙擊手') {
+                document.getElementById('view-game-sniper').classList.remove('hidden');
+                document.getElementById('sniper-intro-overlay').classList.remove('hidden');
+                initSniperDOM();
+            }
+        }
+
+        function stopAllRunningProcesses() {
+            if (streamObj) {
+                streamObj.getTracks().forEach(track => track.stop());
+                streamObj = null;
+            }
+            clearInterval(memoryTimerInterval);
+            memoryTimerInterval = null;
+            for (let key in slotIntervals) {
+                clearInterval(slotIntervals[key]);
+            }
+            slotIntervals = {};
+            
+            isSniperPlaying = false;
+            clearInterval(sniperTimerInterval);
+            clearInterval(sniperSpawnInterval);
+            cancelAnimationFrame(sniperAnimationFrameId);
+            sniperTimerInterval = null;
+            sniperSpawnInterval = null;
+            
+            if (gameStage) {
+                sniperGameObjects.forEach(obj => obj.element.remove());
+                sniperActiveProjectiles.forEach(p => p.element.remove());
+            }
+            sniperGameObjects = [];
+            sniperActiveProjectiles = [];
+        }
+
+
+        // ============================================
+        //  遊戲 A 核心邏輯：極限剪髮挑戰
+        // ============================================
+        function startBangsGame() {
+            playSound('lobby-click'); // 點擊進入遊戲音效
+            document.getElementById('bangs-intro-overlay').classList.add('hidden');
+            bangsState = 'CAMERA';
+            remainingChances = 3;
+            document.getElementById('scis-1').classList.add('active');
+            document.getElementById('scis-2').classList.add('active');
+            document.getElementById('scis-3').classList.add('active');
+            
+            document.getElementById('scale-slider').value = 1;
+            document.getElementById('x-slider').value = 0;
+            document.getElementById('y-slider').value = 0;
+            document.getElementById('base-pos-slider').value = 48;
+            document.getElementById('base-width-slider').value = 260;
+
+            leftPanel.classList.add('hidden');
+            document.getElementById('panel-setup').classList.remove('hidden');
+            document.getElementById('panel-baseline').classList.remove('hidden');
+            document.getElementById('panel-game-difficulty').classList.add('hidden');
+            document.getElementById('panel-game-status').classList.add('hidden');
+            
+            cameraBox.className = "camera-container photo-stage-full"; 
+            hairGameLayer.classList.add('hidden');
+            greenBaseLine.style.display = 'none';
+
+            foreheadBox.className = "forehead-box photo-stage-large-box";
+            foreheadBox.innerText = '( 請將額頭對準定位框 )';
+            foreheadBox.classList.remove('hidden');
+
+            capturedImage.classList.add('hidden');
+            videoStream.classList.remove('hidden');
+            mainActionBtn.innerText = '開始拍攝';
+
+            initBangsCamera();
+        }
+
+        async function initBangsCamera() {
+            try {
+                streamObj = await navigator.mediaDevices.getUserMedia({
+                    video: { width: 520, height: 420, facingMode: "user" }, audio: false
+                });
+                videoStream.srcObject = streamObj;
+            } catch (err) {
+                console.warn("無法開啟相機，改為虛擬體驗模式。");
+            }
+        }
+
+        function takeBangsPicture() {
+            if (streamObj) {
+                const captureCanvas = document.getElementById('capture-canvas');
+                captureCanvas.width = videoStream.videoWidth || 520;
+                captureCanvas.height = videoStream.videoHeight || 420;
+                const ctx = captureCanvas.getContext('2d');
+                ctx.drawImage(videoStream, 0, 0, captureCanvas.width, captureCanvas.height);
+                capturedImage.src = captureCanvas.toDataURL('image/png');
+                capturedImage.classList.remove('hidden');
+                videoStream.classList.add('hidden');
+                streamObj.getTracks().forEach(track => track.stop());
+            }
+        }
+
+        function refreshBangsLayout() {
+            const scale = document.getElementById('scale-slider').value;
+            const x = document.getElementById('x-slider').value;
+            const y = document.getElementById('y-slider').value;
+            
+            if (bangsState !== 'CAMERA') {
+                cameraBox.style.transform = `translate(-50%, -50%) scale(${scale}) translate(${x}px, ${y}px)`;
+            }
+
+            const widthVal = parseInt(document.getElementById('base-width-slider').value);
+            const basePosPercent = parseInt(document.getElementById('base-pos-slider').value);
+
+            if (bangsState !== 'CAMERA') {
+                foreheadBox.style.width = widthVal + 'px';
+            }
+            greenBaseLine.style.top = basePosPercent + '%';
+
+            const stageWidth = stageContainer.clientWidth || 630;
+            const startX = (stageWidth - widthVal) / 2;
+            const endX = startX + widthVal;
+            const arcTopY = 130; 
+
+            topArcPath.setAttribute('d', `M ${startX} 165 Q ${stageWidth/2} ${arcTopY} ${endX} 165`);
+
+            if (bangsState === 'GAMING') recalculateBangsPositions(startX, widthVal, arcTopY);
+        }
+
+        function triggerBangsCountdownAndShoot(callback) {
+            isCountingDown = true;
+            mainActionBtn.classList.add('btn-disabled');
+            countdownDisplay.classList.remove('hidden');
+            
+            let count = 3;
+            const updateCountUI = () => {
+                countdownDisplay.innerText = count;
+                countdownDisplay.classList.remove('countdown-pop');
+                void countdownDisplay.offsetWidth; 
+                countdownDisplay.classList.add('countdown-pop');
+                playSound('countdown'); // 播放倒數嗶嗶提示音
+            };
+            
+            updateCountUI();
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    updateCountUI();
+                } else {
+                    clearInterval(timer);
+                    countdownDisplay.classList.add('hidden');
+                    
+                    const flashOverlay = document.createElement('div');
+                    flashOverlay.classList.add('flash-effect');
+                    cameraBox.appendChild(flashOverlay);
+                    playSound('shutter'); // 播放相機快門閃光燈音效
+                    
+                    takeBangsPicture();
+                    setTimeout(() => flashOverlay.remove(), 600);
+                    
+                    isCountingDown = false;
+                    mainActionBtn.classList.remove('btn-disabled');
+                    callback();
+                }
+            }, 1000); 
+        }
+
+        function handleBangsMainAction() {
+            if (isCountingDown) return; 
+
+            playSound('lobby-click'); // 點擊主操作按鈕音效
+            if (bangsState === 'CAMERA') {
+                triggerBangsCountdownAndShoot(() => {
+                    cameraBox.className = "camera-container photo-stage-large"; 
+                    foreheadBox.className = "forehead-box photo-stage-large-box"; 
+                    foreheadBox.innerText = '( 額頭放於框內 )';
+                    
+                    leftPanel.classList.remove('hidden'); 
+                    greenBaseLine.style.display = 'block'; 
+                    
+                    bangsState = 'SETUP_CONFIRM';
+                    mainActionBtn.innerText = '完成定位，開始剪髮';
+                    
+                    setTimeout(refreshBangsLayout, 50); 
+                });
+            } else if (bangsState === 'SETUP_CONFIRM') {
+                document.getElementById('panel-setup').classList.add('hidden');
+                document.getElementById('panel-baseline').classList.add('hidden');
+                foreheadBox.classList.add('hidden');
+
+                document.getElementById('panel-game-difficulty').classList.remove('hidden');
+                document.getElementById('panel-game-status').classList.remove('hidden');
+                hairGameLayer.classList.remove('hidden');
+
+                generateBangsFromArc();
+                
+                mainActionBtn.innerText = '剪好了！送出結算';
+                bangsState = 'GAMING';
+            } else if (bangsState === 'GAMING') {
+                settleBangsScore();
+            }
+        }
+
+        function generateBangsFromArc() {
+            strandsContainer.innerHTML = '';
+            hairCurrentLengths = []; 
+            hairStartPoints = [];
+
+            const stageWidth = stageContainer.clientWidth || 630;
+            const widthVal = parseInt(document.getElementById('base-width-slider').value);
+            const startX = (stageWidth - widthVal) / 2;
+            const arcTopY = 130; 
+
+            for (let i = 0; i < totalStrands; i++) {
+                const randomInitialLength = 160 + (Math.random() * 35);
+                hairCurrentLengths.push(randomInitialLength); 
+                
+                const strandEl = document.createElement('div');
+                strandEl.classList.add('dynamic-strand');
+                strandEl.id = `strand-${i}`;
+                
+                const randomRotation = (Math.random() * 2) - 1; 
+                strandEl.style.transform = `rotate(${randomRotation}deg)`;
+
+                strandsContainer.appendChild(strandEl);
+            }
+            recalculateBangsPositions(startX, widthVal, arcTopY);
+            bindBangsCuttingEvents();
+        }
+
+        function recalculateBangsPositions(startX, totalWidth, arcTopY) {
+            const step = totalWidth / (totalStrands - 1);
+            const stageWidth = stageContainer.clientWidth || 630;
+
+            for (let i = 0; i < totalStrands; i++) {
+                const curX = startX + (i * step);
+                const t = (curX - startX) / totalWidth;
+                
+                const pt0_y = 165; 
+                const pt1_y = arcTopY; 
+                const pt2_y = 165;
+                const curY = (1-t)*(1-t)*pt0_y + 2*(1-t)*t*pt1_y + t*t*pt2_y;
+
+                hairStartPoints[i] = { x: curX, y: curY };
+                const strandEl = document.getElementById(`strand-${i}`);
+                if (strandEl) {
+                    strandEl.style.left = `${curX - 8}px`; 
+                    strandEl.style.top = `${curY}px`; 
+                    strandEl.style.height = `${hairCurrentLengths[i]}px`;
+                }
+            }
+        }
+
+        // 新增：防暴音之限流剪髮喀嚓音效觸發
+        let lastSnipTime = 0;
+        function playSnipThrottled() {
+            const now = Date.now();
+            if (now - lastSnipTime > 90) { // 限制最快每90毫秒播放一次喀嚓聲
+                playSound('snip');
+                lastSnipTime = now;
+            }
+        }
+
+        function bindBangsCuttingEvents() {
+            const handleCut = (e) => {
+                if (!isDrawing && e.type !== 'touchmove') return;
+
+                const rect = stageContainer.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                const touchX = clientX - rect.left;
+                const touchY = clientY - rect.top;
+
+                for (let i = 0; i < totalStrands; i++) {
+                    const pt = hairStartPoints[i];
+                    if (Math.abs(touchX - pt.x) < 16) {
+                        const targetLength = touchY - pt.y; 
+                        
+                        if (targetLength < hairCurrentLengths[i] && targetLength > 10) {
+                            hairCurrentLengths[i] = targetLength;
+                            document.getElementById(`strand-${i}`).style.height = `${targetLength}px`;
+                            playSnipThrottled(); // 播放剪髮喀嚓音效
+                        }
+                    }
+                }
+            };
+
+            stageContainer.addEventListener('mousedown', () => isDrawing = true);
+            window.addEventListener('mouseup', () => isDrawing = false);
+            stageContainer.addEventListener('mousemove', handleCut);
+
+            stageContainer.addEventListener('touchstart', () => isDrawing = true);
+            window.addEventListener('touchend', () => isDrawing = false);
+            stageContainer.addEventListener('touchmove', handleCut);
+        }
+
+        function resetBangsGame() {
+            playSound('reload'); // 重新挑戰載入音效
+            if (remainingChances > 1) {
+                remainingChances--;
+                document.getElementById(`scis-${remainingChances + 1}`).classList.remove('active');
+                generateBangsFromArc();
+            } else {
+                document.getElementById(`scis-1`).classList.remove('active');
+                settleBangsScore();
+            }
+        }
+
+        function settleBangsScore() {
+            bangsState = 'FINISHED';
+            const stageHeight = stageContainer.clientHeight || 500;
+            const basePosPercent = parseInt(document.getElementById('base-pos-slider').value);
+            const targetGlobalY = (stageHeight * basePosPercent) / 100; 
+
+            let totalError = 0;
+            for (let i = 0; i < totalStrands; i++) {
+                const currentBottomY = hairStartPoints[i].y + hairCurrentLengths[i];
+                totalError += Math.abs(currentBottomY - targetGlobalY);
+            }
+
+            const avgError = totalError / totalStrands;
+            let score = Math.round(100 - (avgError * 2)); 
+            if (score > 100) score = 100; if (score < 0) score = 0;
+
+            if (score >= 70) {
+                playSound('win'); // 分數高於 70 播放勝利大獎樂章
+            } else {
+                playSound('fail'); // 低於 70 播放結束挫敗音效
+            }
+
+            showGlobalResult(score, "bangs");
+        }
+
+
+        // ============================================
+        //  遊戲 B 核心邏輯：時尚穿搭記憶大考驗
+        // ============================================
+        function startMemoryGame() {
+            playSound('reload'); // 載入並刷新關卡音效
+            document.getElementById('memory-intro-overlay').classList.add('hidden');
+            document.getElementById('memorize-hint-banner').classList.remove('hidden');
+            matchedPairs = 0;
+            memoryTimerVal = 10; 
+            memoryPhase = 'MEMORIZE';
+            
+            document.getElementById('memory-score').innerText = `0 / 6`;
+            document.getElementById('memory-timer').innerText = memoryTimerVal;
+            document.getElementById('memory-phase-title').innerText = `⏱️ 迅速記下這套穿搭:`;
+
+            targetOutfit = {};
+            playerOutfit = {};
+            lockedSlots = {};
+            currentDisplayIdx = {};
+
+            for (let key in categories) {
+                const items = categories[key].items;
+                const randomItem = items[Math.floor(Math.random() * items.length)];
+                targetOutfit[key] = randomItem;
+                lockedSlots[key] = false;
+                
+                currentDisplayIdx[key] = Math.floor(Math.random() * items.length);
+            }
+
+            renderMannequin(targetOutfit);
+            buildInteractiveSlots();
+            
+            startMemoryTimer();
+        }
+
+        function renderMannequin(outfitData, hide = false) {
+            for (let key in categories) {
+                const el = document.getElementById(`pos-${key}`);
+                if (!el) continue;
+
+                if (hide) {
+                    el.style.opacity = '0';
+                    if (key === 'bag') {
+                        el.style.transform = 'scale(0) rotate(-10deg)';
+                    } else {
+                        el.style.transform = 'translate(-50%, 0) scale(0)';
+                    }
+                } else {
+                    const itemIdx = outfitData[key];
+                    const svgCode = (itemIdx !== undefined) ? categories[key].getSVG(itemIdx) : '';
+
+                    if (key === 'shoes') {
+                        el.querySelector('.left-foot').innerHTML = svgCode;
+                        el.querySelector('.right-foot').innerHTML = svgCode;
+                    } else {
+                        el.innerHTML = svgCode;
+                    }
+
+                    el.style.opacity = '1';
+                    if (key === 'bag') {
+                        el.style.transform = 'scale(1) rotate(0deg)';
+                    } else {
+                        el.style.transform = 'translate(-50%, 0) scale(1)';
+                    }
+                }
+            }
+        }
+
+        function buildInteractiveSlots() {
+            const silhouettes = {
+                hat: `<svg viewBox="0 0 100 100" fill="none" class="w-12 h-12 stroke-pink-500/50 stroke-[5] opacity-80"><path d="M15 70 C15 70 50 64 85 70 L80 75 H20 Z" /><rect x="30" y="25" width="40" height="45" rx="4" /></svg>`,
+                accessory: `<svg viewBox="0 0 100 40" fill="none" class="w-12 h-12 stroke-pink-500/50 stroke-[5] opacity-80"><circle cx="28" cy="20" r="14" /><circle cx="72" cy="20" r="14" /><line x1="42" y1="20" x2="58" y2="20" /></svg>`,
+                top: `<svg viewBox="0 0 120 120" fill="none" class="w-12 h-12 stroke-pink-500/50 stroke-[5] opacity-80"><path d="M30 35 H90 L105 85 H85 V100 H35 V85 L15 85 Z" /></svg>`,
+                bottom: `<svg viewBox="0 0 120 120" fill="none" class="w-12 h-12 stroke-pink-500/50 stroke-[5] opacity-80"><path d="M35 15 H85 L90 100 H65 L60 45 L55 100 H30 Z" /></svg>`,
+                shoes: `<svg viewBox="0 0 60 50" fill="none" class="w-12 h-12 stroke-pink-500/50 stroke-[5] opacity-80"><path d="M10 40 L25 15 L45 15 L55 35 L50 45 L10 45 Z" /></svg>`,
+                bag: `<svg viewBox="0 0 100 120" fill="none" class="w-12 h-12 stroke-pink-500/50 stroke-[5] opacity-80"><rect x="20" y="45" width="60" height="42" rx="4" /><path d="M40 45 V35 H60 V45" /></svg>`
+            };
+
+            for (let key in categories) {
+                const btn = document.getElementById(`slot-${key}`);
+                const previewDiv = document.getElementById(`slot-emoji-${key}`);
+                
+                btn.className = "option-circle w-24 h-24 rounded-full flex items-center justify-center cursor-not-allowed opacity-50 shadow-lg p-2 overflow-hidden relative transition-all duration-300";
+                btn.disabled = true;
+                
+                previewDiv.className = "w-full h-full flex flex-col items-center justify-center";
+                previewDiv.innerHTML = `
+                    <div class="flex flex-col items-center justify-center opacity-40">
+                        ${silhouettes[key]}
+                        <span class="text-[10px] text-slate-400 font-black mt-1">🔒 鎖定</span>
+                    </div>
+                `;
+            }
+        }
+
+        function startMemoryTimer() {
+            clearInterval(memoryTimerInterval);
+            memoryTimerInterval = setInterval(() => {
+                memoryTimerVal--;
+                document.getElementById('memory-timer').innerText = memoryTimerVal;
+
+                if (memoryPhase === 'MEMORIZE') {
+                    if (memoryTimerVal <= 0) {
+                        memoryPhase = 'PLAY';
+                        memoryTimerVal = 25; 
+                        document.getElementById('memory-timer').innerText = memoryTimerVal;
+                        document.getElementById('memory-phase-title').innerText = `⏱️ 還原記憶穿搭:`;
+                        document.getElementById('memorize-hint-banner').classList.add('hidden');
+
+                        renderMannequin({}, true);
+                        playSound('reload'); // 配件旋轉隱藏與開始還原時播放旋轉音效
+
+                        for (let key in categories) {
+                            const btn = document.getElementById(`slot-${key}`);
+                            btn.className = "option-circle w-24 h-24 rounded-full flex items-center justify-center cursor-pointer shadow-lg p-2 overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95";
+                            btn.disabled = false;
+
+                            const intervalTime = 550 + (Math.random() * 250);
+                            slotIntervals[key] = setInterval(() => {
+                                currentDisplayIdx[key] = (currentDisplayIdx[key] + 1) % categories[key].items.length;
+                                const itemIdx = categories[key].items[currentDisplayIdx[key]];
+                                document.getElementById(`slot-emoji-${key}`).innerHTML = categories[key].getSVG(itemIdx);
+                            }, intervalTime);
+                        }
+                    }
+                } else if (memoryPhase === 'PLAY') {
+                    if (memoryTimerVal <= 0) {
+                        clearInterval(memoryTimerInterval);
+                        forceSubmitMemory();
+                    }
+                }
+            }, 1000);
+        }
+
+        function handleSlotClick(key) {
+            if (memoryPhase !== 'PLAY' || lockedSlots[key]) return;
+
+            const btn = document.getElementById(`slot-${key}`);
+            const el = document.getElementById(`pos-${key}`);
+            const selectedIdx = categories[key].items[currentDisplayIdx[key]];
+
+            if (selectedIdx === targetOutfit[key]) {
+                clearInterval(slotIntervals[key]);
+                lockedSlots[key] = true;
+                
+                playSound('correct'); // 配對成功！播放清脆「叮咚」音效
+                btn.className = "option-circle w-24 h-24 rounded-full flex items-center justify-center p-2 overflow-hidden circle-correct-locked";
+                playerOutfit[key] = selectedIdx;
+
+                const svgCode = categories[key].getSVG(selectedIdx);
+                if (key === 'shoes') {
+                    el.querySelector('.left-foot').innerHTML = svgCode;
+                    el.querySelector('.right-foot').innerHTML = svgCode;
+                } else {
+                    el.innerHTML = svgCode;
+                }
+
+                el.style.opacity = '1';
+                if (key === 'bag') {
+                    el.style.transform = 'scale(1) rotate(0deg)';
+                } else {
+                    el.style.transform = 'translate(-50%, 0) scale(1)';
+                }
+
+                matchedPairs++;
+                document.getElementById('memory-score').innerText = `${matchedPairs} / 6`;
+
+                checkAllCorrectAndSubmit();
+            } else {
+                playSound('wrong'); // 配對錯誤！播放低沉雙重「嗡嗡」警告音效
+                btn.classList.add('circle-wrong-flash');
+                setTimeout(() => {
+                    btn.classList.remove('circle-wrong-flash');
+                }, 400);
+            }
+        }
+
+        function checkAllCorrectAndSubmit() {
+            let allCorrect = true;
+            for (let key in categories) {
+                if (!lockedSlots[key]) {
+                    allCorrect = false;
+                    break;
+                }
+            }
+
+            if (allCorrect) {
+                clearInterval(memoryTimerInterval);
+                setTimeout(() => {
+                    settleMemoryScore();
+                }, 400);
+            }
+        }
+
+        function forceSubmitMemory() {
+            playSound('fail'); // 時間截止
+            for (let key in categories) {
+                clearInterval(slotIntervals[key]);
+                lockedSlots[key] = true;
+                const btn = document.getElementById(`slot-${key}`);
+                btn.style.opacity = "0.4";
+                playerOutfit[key] = null;
+                
+                const el = document.getElementById(`pos-${key}`);
+                el.style.opacity = '0';
+                if (key === 'bag') {
+                    el.style.transform = 'scale(0) rotate(-10deg)';
+                } else {
+                    el.style.transform = 'translate(-50%, 0) scale(0)';
+                }
+            }
+            settleMemoryScore();
+        }
+
+        function settleMemoryScore() {
+            clearInterval(memoryTimerInterval);
+            for (let key in slotIntervals) {
+                clearInterval(slotIntervals[key]);
+            }
+            if (matchedPairs >= 4) {
+                playSound('win'); // 答對4件以上播放過關大捷音效
+            } else {
+                playSound('fail'); // 答對少於4件播放惜敗音效
+            }
+            showGlobalResult(matchedPairs, "memory");
+        }
+
+
+        // ====================================================================
+        //  10. 氣球狙擊手 v3(6) 核心邏輯整合
+        // ====================================================================
+        function initSniperDOM() {
+            gameStage = document.getElementById('game-stage');
+            balloonContainer = document.getElementById('balloon-container');
+            projectileContainer = document.getElementById('projectiles-container');
+            effectsContainer = document.getElementById('effects-container');
+            turretBarrel = document.getElementById('turret-barrel');
+            customCrosshair = document.getElementById('custom-crosshair');
+            
+            bulletIcons = document.querySelectorAll('#bullet-icons-container .bullet-icon');
+            bulletRatioTxt = document.getElementById('bullet-ratio-txt');
+            scoreText = document.getElementById('score-text');
+            timerBar = document.getElementById('timer-bar');
+            timerText = document.getElementById('timer-text');
+            
+            btnItem = document.getElementById('btn-item');
+            btnStop = document.getElementById('btn-stop');
+            ticketDispenser = document.getElementById('ticket-dispenser');
+            
+            toastEl = document.getElementById('game-toast');
+            toastTitle = document.getElementById('toast-title');
+            toastDesc = document.getElementById('toast-desc');
+
+            if (!gameStage.dataset.bound) {
+                gameStage.addEventListener('mousemove', handleSniperAim);
+                gameStage.addEventListener('touchmove', handleSniperAim, { passive: true });
+                gameStage.addEventListener('click', fireSniperProjectile);
+                
+                btnItem.addEventListener('click', triggerSniperItemAction);
+                btnStop.addEventListener('click', () => {
+                    if (isSniperPlaying) endGameSniper();
+                });
+                gameStage.dataset.bound = "true";
+            }
+        }
+
+        function startSniperGame() {
+            document.getElementById('sniper-intro-overlay').classList.add('hidden');
+            
+            clearInterval(sniperTimerInterval);
+            clearInterval(sniperSpawnInterval);
+            cancelAnimationFrame(sniperAnimationFrameId);
+            
+            sniperGameObjects.forEach(obj => obj.element.remove());
+            sniperActiveProjectiles.forEach(p => p.element.remove());
+            sniperGameObjects = [];
+            sniperActiveProjectiles = [];
+
+            sniperScore = 0; 
+            sniperBullets = 5;
+            sniperTimeRemaining = SNIPER_DURATION;
+            isSniperPlaying = true;
+            sniperHasUsedTimeBonus = false;
+
+            updateSniperUI();
+            
+            const oldTickets = document.querySelectorAll('.ticket-element');
+            oldTickets.forEach(t => t.remove());
+
+            prePopulateSniperField();
+
+            sniperTimerInterval = setInterval(updateSniperTimer, 100);
+            sniperSpawnInterval = setInterval(spawnSniperObjectRandomly, 650);
+            updateSniperPhysics();
+
+            showSniperToast("氣球狙擊手", "擊中氣球得分，避開炸彈！", 2200);
+        }
+
+        function prePopulateSniperField() {
+            const width = gameStage.clientWidth || 800;
+            const height = gameStage.clientHeight || 500;
+            
+            for (let i = 0; i < 8; i++) {
+                const rx = 50 + Math.random() * (width - 100);
+                const ry = 80 + Math.random() * (height - 220);
+                spawnSniperBalloonAt(rx, ry);
+            }
+            for (let i = 0; i < 3; i++) {
+                const rx = 50 + Math.random() * (width - 100);
+                const ry = 80 + Math.random() * (height - 220);
+                spawnSniperBombAt(rx, ry);
+            }
+        }
+
+        function spawnSniperObjectRandomly() {
+            if (!isSniperPlaying) return;
+            const width = gameStage.clientWidth;
+            
+            const isBomb = Math.random() < 0.22;
+            const startX = Math.random() < 0.5 ? -60 : width + 60;
+            const startY = 60 + Math.random() * (gameStage.clientHeight - 200);
+
+            if (isBomb) {
+                spawnSniperBombAt(startX, startY);
+            } else {
+                spawnSniperBalloonAt(startX, startY);
+            }
+        }
+
+        function spawnSniperBalloonAt(x, y) {
+            const type = SNIPER_BALLOON_TYPES[Math.floor(Math.random() * SNIPER_BALLOON_TYPES.length)];
+            const element = document.createElement('div');
+            element.className = 'absolute pointer-events-none select-none';
+            
+            const size = window.innerWidth < 640 ? 50 : 64;
+            element.style.width = `${size}px`;
+            element.style.height = `${size * 1.25}px`;
+            
+            const randomRotation = -20 + Math.random() * 40;
+            const isPrize = Math.random() < 0.6; 
+            
+            const paperColor = '#d1d5db';
+            const paperStroke = '#9ca3af';
+
+            element.innerHTML = `
+                <svg width="100%" height="100%" viewBox="0 0 100 125" style="transform: rotate(${randomRotation}deg)">
+                    <ellipse cx="51" cy="52" rx="42" ry="46" fill="black" opacity="0.05" />
+                    <ellipse cx="50" cy="50" rx="42" ry="46" fill="${type.color}" stroke="${type.border}" stroke-width="2.5" />
+                    <circle cx="34" cy="28" r="7" fill="white" />
+                    <g transform="translate(20, 62) rotate(-3)">
+                        <rect x="0" y="0" width="60" height="20" rx="3" fill="${paperColor}" stroke="${paperStroke}" stroke-width="1.5" />
+                        <circle cx="0" cy="10" r="3" fill="${type.color}" />
+                        <circle cx="60" cy="10" r="3" fill="${type.color}" />
+                    </g>
+                    <text x="50" y="42" font-family="Arial" font-size="16" font-weight="bold" fill="white" opacity="0.4" text-anchor="middle" dominant-baseline="middle">${type.label}</text>
+                </svg>
+            `;
+
+            gameStage.appendChild(element);
+
+            const vx = (x < 0) ? (0.8 + Math.random() * 1.5) : (-0.8 - Math.random() * 1.5);
+            const vy = -0.3 + Math.random() * 0.6;
+
+            sniperGameObjects.push({
+                id: 'balloon-' + Math.random(),
+                element: element,
+                type: 'balloon',
+                bonusType: type.bonusType,
+                isPrize: isPrize,
+                x: x,
+                y: y,
+                vx: vx,
+                vy: vy,
+                size: size,
+                angle: randomRotation
+            });
+        }
+
+        function spawnSniperBombAt(x, y) {
+            const element = document.createElement('div');
+            element.className = 'absolute pointer-events-none select-none';
+            
+            const size = window.innerWidth < 640 ? 35 : 44;
+            element.style.width = `${size}px`;
+            element.style.height = `${size}px`;
+
+            element.innerHTML = `
+                <svg width="100%" height="100%" viewBox="0 0 100 100">
+                    <circle cx="48" cy="54" r="32" fill="black" opacity="0.1" />
+                    <circle cx="45" cy="50" r="32" fill="#1e1e1e" stroke="#000000" stroke-width="3" />
+                    <circle cx="32" cy="36" r="6" fill="#7f8c8d" opacity="0.6" />
+                    <path d="M68,32 Q78,22 75,12" stroke="#d35400" stroke-width="4" fill="none" />
+                    <circle cx="75" cy="12" r="7" fill="#f1c40f" class="spark-glow" />
+                    <circle cx="75" cy="12" r="4" fill="#e67e22" />
+                </svg>
+            `;
+
+            gameStage.appendChild(element);
+
+            const vx = (x < 0) ? (1.0 + Math.random() * 1.6) : (-1.0 - Math.random() * 1.6);
+            const vy = -0.4 + Math.random() * 0.8;
+
+            sniperGameObjects.push({
+                id: 'bomb-' + Math.random(),
+                element: element,
+                type: 'bomb',
+                x: x,
+                y: y,
+                vx: vx,
+                vy: vy,
+                size: size
+            });
+        }
+
+        function handleSniperAim(e) {
+            if (!isSniperPlaying) return;
+            const stageRect = gameStage.getBoundingClientRect();
+            let clientX, clientY;
+
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            const relX = clientX - stageRect.left;
+            const relY = clientY - stageRect.top;
+            
+            customCrosshair.style.left = `${relX}px`;
+            customCrosshair.style.top = `${relY}px`;
+
+            const centerX = stageRect.left + stageRect.width / 2;
+            const centerY = stageRect.bottom;
+
+            const dx = clientX - centerX;
+            const dy = clientY - centerY;
+
+            let angleRad = Math.atan2(dy, dx);
+            let angleDeg = angleRad * (180 / Math.PI) + 90;
+
+            angleDeg = Math.max(-70, Math.min(70, angleDeg));
+            turretBarrel.style.transform = `rotate(${angleDeg}deg)`;
+        }
+
+        function fireSniperProjectile() {
+            if (!isSniperPlaying) return;
+
+            if (event.target.closest('#btn-item') || event.target.closest('#btn-stop')) {
+                return;
+            }
+
+            if (sniperBullets <= 0) {
+                playSound('empty');
+                showSniperToast("彈藥空了！", "請點擊 [道具] 按鈕或按 R 鍵裝彈", 1000);
+                return;
+            }
+
+            sniperBullets--;
+            playSound('shoot');
+            updateSniperUI();
+
+            const currentRotationStr = turretBarrel.style.transform;
+            const angleDeg = parseFloat(currentRotationStr.replace('rotate(', '').replace('deg)', '')) || 0;
+            const angleRad = (angleDeg - 90) * (Math.PI / 180);
+
+            const startX = gameStage.clientWidth / 2;
+            const startY = gameStage.clientHeight;
+
+            const bullet = document.createElement('div');
+            bullet.className = 'absolute w-3.5 h-3.5 bg-[#2d2d2d] border border-black rounded-full shadow-md';
+            bullet.style.left = `${startX - 7}px`;
+            bullet.style.top = `${startY - 7}px`;
+            projectileContainer.appendChild(bullet);
+
+            const speed = 18;
+            const vx = Math.cos(angleRad) * speed;
+            const vy = Math.sin(angleRad) * speed;
+
+            sniperActiveProjectiles.push({
+                element: bullet,
+                x: startX,
+                y: startY,
+                vx: vx,
+                vy: vy
+            });
+        }
+
+        function updateSniperPhysics() {
+            if (!isSniperPlaying) return;
+
+            const stageWidth = gameStage.clientWidth;
+            const stageHeight = gameStage.clientHeight;
+
+            for (let i = sniperGameObjects.length - 1; i >= 0; i--) {
+                const obj = sniperGameObjects[i];
+                obj.x += obj.vx;
+                obj.y += obj.vy;
+
+                obj.element.style.left = `${obj.x - obj.size / 2}px`;
+                obj.element.style.top = `${obj.y - obj.size / 2}px`;
+
+                if (obj.vx > 0 && obj.x > stageWidth + 80) {
+                    obj.element.remove();
+                    sniperGameObjects.splice(i, 1);
+                } else if (obj.vx < 0 && obj.x < -80) {
+                    obj.element.remove();
+                    sniperGameObjects.splice(i, 1);
+                }
+            }
+
+            for (let i = sniperActiveProjectiles.length - 1; i >= 0; i--) {
+                const p = sniperActiveProjectiles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+
+                p.element.style.left = `${p.x - 7}px`;
+                p.element.style.top = `${p.y - 7}px`;
+
+                if (p.x < -20 || p.x > stageWidth + 20 || p.y < -20 || p.y > stageHeight + 20) {
+                    p.element.remove();
+                    sniperActiveProjectiles.splice(i, 1);
+                    continue;
+                }
+
+                let hitSomething = false;
+                for (let j = sniperGameObjects.length - 1; j >= 0; j--) {
+                    const obj = sniperGameObjects[j];
+                    const dist = Math.hypot(p.x - obj.x, p.y - obj.y);
+                    const hitRange = obj.size * 0.48;
+
+                    if (dist < hitRange) {
+                        hitSomething = true;
+                        
+                        if (obj.type === 'balloon') {
+                            if (obj.isPrize) {
+                                triggerSniperPrizeSplash(obj.x, obj.y);
+                                applySniperBalloonBonus(obj.bonusType);
+                                playSound('pop');
+                            } else {
+                                triggerSniperMissSplash(obj.x, obj.y);
+                                playSound('miss');
+                            }
+                        } else if (obj.type === 'bomb') {
+                            triggerSniperBombExplosion(obj.x, obj.y);
+                            sniperScore = Math.max(0, sniperScore - 10);
+                            playSound('bomb');
+                        }
+
+                        obj.element.remove();
+                        sniperGameObjects.splice(j, 1);
+                        break;
+                    }
+                }
+
+                if (hitSomething) {
+                    p.element.remove();
+                    sniperActiveProjectiles.splice(i, 1);
+                    updateSniperUI();
+                }
+            }
+
+            sniperAnimationFrameId = requestAnimationFrame(updateSniperPhysics);
+        }
+
+        function applySniperBalloonBonus(bonusType) {
+            if (bonusType === 'score') {
+                sniperScore += 5; 
+            }
+            sniperScore += 10; 
+        }
+
+        function triggerSniperPrizeSplash(x, y) {
+            const prizeBox = document.createElement('div');
+            prizeBox.className = 'prize-toast absolute border-4 border-[#2ecc71] bg-white/95 px-4 py-1.5 rounded-lg flex items-center justify-center font-black text-lg text-[#2ecc71] shadow-lg pointer-events-none z-30';
+            prizeBox.textContent = '中獎';
+            prizeBox.style.left = `${x - 45}px`;
+            prizeBox.style.top = `${y - 40}px`;
+            effectsContainer.appendChild(prizeBox);
+
+            const scoreLabel = document.createElement('div');
+            scoreLabel.className = 'absolute text-slate-800 font-extrabold text-2xl sm:text-3xl tracking-tight pointer-events-none z-30 transition-all duration-700 ease-out';
+            scoreLabel.innerHTML = `+10 <span class="text-xl">+</span>`;
+            scoreLabel.style.left = `${x + 35}px`;
+            scoreLabel.style.top = `${y - 20}px`;
+            effectsContainer.appendChild(scoreLabel);
+
+            setTimeout(() => {
+                scoreLabel.style.transform = 'translateY(-30px)';
+                scoreLabel.style.opacity = '0';
+            }, 30);
+
+            setTimeout(() => {
+                prizeBox.remove();
+                scoreLabel.remove();
+            }, 1000);
+
+            createSniperParticles(x, y, ['#ff7675', '#74b9ff', '#ffeaa7', '#55efc4', '#fd79a8']);
+        }
+
+        function triggerSniperMissSplash(x, y) {
+            const missBox = document.createElement('div');
+            missBox.className = 'miss-toast absolute border-4 border-[#e74c3c] bg-white/95 px-3 py-1.5 rounded-lg flex items-center justify-center font-black text-lg text-[#e74c3c] shadow-lg pointer-events-none z-30';
+            missBox.textContent = '未中獎';
+            missBox.style.left = `${x - 50}px`;
+            missBox.style.top = `${y - 40}px`;
+            effectsContainer.appendChild(missBox);
+
+            const scoreLabel = document.createElement('div');
+            scoreLabel.className = 'absolute text-red-500 font-extrabold text-2xl sm:text-3xl tracking-tight pointer-events-none z-30 transition-all duration-700 ease-out';
+            scoreLabel.innerHTML = `+0`;
+            scoreLabel.style.left = `${x + 35}px`;
+            scoreLabel.style.top = `${y - 20}px`;
+            effectsContainer.appendChild(scoreLabel);
+
+            setTimeout(() => {
+                scoreLabel.style.transform = 'translateY(-30px)';
+                scoreLabel.style.opacity = '0';
+            }, 30);
+
+            setTimeout(() => {
+                missBox.remove();
+                scoreLabel.remove();
+            }, 1000);
+
+            createSniperParticles(x, y, ['#9ca3af', '#6b7280', '#4b5563', '#d1d5db']);
+        }
+
+        function triggerSniperBombExplosion(x, y) {
+            const smoke = document.createElement('div');
+            smoke.className = 'absolute bg-slate-800/90 rounded-full flex items-center justify-center text-white text-xs font-black p-2 shadow-xl z-40 transition-all duration-300 scale-50 opacity-100 border border-black';
+            smoke.style.width = '80px';
+            smoke.style.height = '80px';
+            smoke.style.left = `${x - 40}px`;
+            smoke.style.top = `${y - 40}px`;
+            smoke.innerHTML = '💥 BOOM!';
+            effectsContainer.appendChild(smoke);
+
+            const penaltyLabel = document.createElement('div');
+            penaltyLabel.className = 'absolute text-red-600 font-black text-2xl drop-shadow-md z-40 transition-all duration-500 ease-out';
+            penaltyLabel.textContent = '-10分';
+            penaltyLabel.style.left = `${x - 30}px`;
+            penaltyLabel.style.top = `${y - 60}px`;
+            effectsContainer.appendChild(penaltyLabel);
+
+            setTimeout(() => {
+                smoke.style.transform = 'scale(1.4)';
+                smoke.style.opacity = '0';
+                penaltyLabel.style.transform = 'translateY(-20px)';
+                penaltyLabel.style.opacity = '0';
+            }, 30);
+
+            setTimeout(() => {
+                smoke.remove();
+                penaltyLabel.remove();
+            }, 550);
+        }
+
+        function createSniperParticles(x, y, colors) {
+            for (let i = 0; i < 10; i++) {
+                const p = document.createElement('div');
+                p.className = 'absolute w-2 h-2 rounded-full pointer-events-none';
+                p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                p.style.left = `${x}px`;
+                p.style.top = `${y}px`;
+                effectsContainer.appendChild(p);
+
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 2 + Math.random() * 4;
+                const vx = Math.cos(angle) * speed;
+                const vy = Math.sin(angle) * speed;
+
+                let opacity = 1;
+                let px = x;
+                let py = y;
+
+                function anim() {
+                    px += vx;
+                    py += vy;
+                    opacity -= 0.05;
+                    p.style.left = `${px}px`;
+                    p.style.top = `${py}px`;
+                    p.style.opacity = opacity;
+
+                    if (opacity > 0) {
+                        requestAnimationFrame(anim);
+                    } else {
+                        p.remove();
+                    }
+                }
+                anim();
+            }
+        }
+
+        function triggerSniperItemAction() {
+            if (!isSniperPlaying) return;
+
+            let chosenItem = 'bullet';
+            if (!sniperHasUsedTimeBonus) {
+                chosenItem = Math.random() < 0.6 ? 'bullet' : 'time';
+            }
+
+            if (chosenItem === 'bullet') {
+                if (sniperBullets >= 5) {
+                    showSniperToast("道具發動！", "抽中 🔋 子彈 +5！(彈藥已滿)", 1200);
+                } else {
+                    sniperBullets = Math.min(5, sniperBullets + 5);
+                    playSound('reload');
+                    updateSniperUI();
+                    showSniperToast("道具發動！", "幸運抽中 🔋 子彈 +5！", 1200);
+                }
+            } else if (chosenItem === 'time') {
+                sniperHasUsedTimeBonus = true; 
+                sniperTimeRemaining = Math.min(SNIPER_DURATION, sniperTimeRemaining + 3);
+                playSound('reload');
+                updateSniperUI();
+                showSniperToast("道具發動！", "幸運抽中 ⏳ 時間 +3秒！(本場限用一次)", 1800);
+            }
+        }
+
+        function updateSniperTimer() {
+            if (!isSniperPlaying) return;
+
+            sniperTimeRemaining -= 0.1;
+            if (sniperTimeRemaining <= 0) {
+                sniperTimeRemaining = 0;
+                endGameSniper();
+            }
+
+            const percentage = (sniperTimeRemaining / SNIPER_DURATION) * 100;
+            timerBar.style.width = `${percentage}%`;
+            timerText.textContent = `${Math.ceil(sniperTimeRemaining)}S`;
+
+            if (sniperTimeRemaining <= 4) {
+                timerBar.classList.remove('bg-red-500');
+                timerBar.classList.add('bg-rose-600', 'animate-pulse');
+            } else {
+                timerBar.classList.add('bg-red-500');
+                timerBar.classList.remove('bg-rose-600', 'animate-pulse');
+            }
+        }
+
+        function endGameSniper() {
+            isSniperPlaying = false;
+            clearInterval(sniperTimerInterval);
+            clearInterval(sniperSpawnInterval);
+            cancelAnimationFrame(sniperAnimationFrameId);
+
+            let ticketsEarned = 1;
+            if (sniperScore >= 100) {
+                ticketsEarned = 3;
+            } else if (sniperScore >= 60) {
+                ticketsEarned = 2;
+            } else {
+                ticketsEarned = 1;
+            }
+
+            if (sniperScore >= 80) {
+                playSound('win');
+            } else {
+                playSound('fail');
+            }
+
+            dispenseSniperTickets(ticketsEarned);
+
+            setTimeout(() => {
+                showGlobalResult(sniperScore, "sniper");
+            }, 600);
+        }
+
+        function dispenseSniperTickets(count) {
+            if (count <= 0) return;
+            let index = 0;
+
+            function spawn() {
+                if (index >= count) return;
+                playSound('ticket'); // 播放出實體彩券列印聲
+
+                const ticket = document.createElement('div');
+                ticket.className = 'ticket-element absolute w-24 bg-yellow-100 border-2 border-yellow-500 rounded-sm shadow-md flex flex-col items-center justify-between text-[8px] text-yellow-800 font-bold p-1 z-40 ticket-strip';
+                ticket.style.left = 'calc(50% - 48px)';
+                ticket.innerHTML = `
+                    <div class="w-full flex justify-between border-b border-dashed border-yellow-400 pb-0.5">
+                        <span>★ WIN ★</span>
+                        <span>#${Math.floor(Math.random() * 9000 + 1000)}</span>
+                    </div>
+                    <div class="my-1 flex items-center gap-1">
+                        <span class="text-[10px]">🎟️</span>
+                        <span>PRIZE TICKET</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-black/10 flex gap-[2px]">
+                        ${'<div class="flex-1 bg-black/40"></div>'.repeat(6)}
+                    </div>
+                `;
+
+                ticketDispenser.appendChild(ticket);
+                index++;
+                setTimeout(spawn, 300);
+            }
+            spawn();
+        }
+
+        function updateSniperUI() {
+            scoreText.textContent = `${sniperScore}分`;
+            bulletRatioTxt.textContent = `${sniperBullets}/5`;
+
+            bulletIcons.forEach((icon, index) => {
+                if (index < sniperBullets) {
+                    icon.style.opacity = '1';
+                    icon.style.transform = 'scaleY(1)';
+                } else {
+                    icon.style.opacity = '0.15';
+                    icon.style.transform = 'scaleY(0.4)';
+                }
+            });
+        }
+
+        function showSniperToast(title, desc, duration = 1500) {
+            toastTitle.textContent = title;
+            toastDesc.textContent = desc;
+            
+            toastEl.classList.remove('opacity-0', 'scale-50');
+            toastEl.classList.add('opacity-100', 'scale-100');
+
+            setTimeout(() => {
+                toastEl.classList.remove('opacity-100', 'scale-100');
+                toastEl.classList.add('opacity-0', 'scale-50');
+            }, duration);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'r' || e.key === 'R' || e.key === ' ') {
+                if (isSniperPlaying) {
+                    e.preventDefault();
+                    triggerSniperItemAction();
+                }
+            }
+        });
+
+        // ============================================
+        //  9. 評分卡結算彈窗模組 (自動切換與六秒返回大廳)
+        // ============================================
+        function showGlobalResult(scoreOrVal, gameType = "memory") {
+            const subtitleEl = document.getElementById('global-result-subtitle');
+            const defaultCard = document.getElementById('default-result-card');
+            const sniperCard = document.getElementById('sniper-result-card');
+
+            if (gameType === "sniper") {
+                // 切換為氣球狙擊手專屬的高還原度新版結算畫面
+                defaultCard.classList.add('hidden');
+                sniperCard.classList.remove('hidden');
+
+                // 計算彩票張數 (100分以上 3張; 60分以上 2張; 否則 1張)
+                let ticketsEarned = 1;
+                if (scoreOrVal >= 100) {
+                    ticketsEarned = 3;
+                } else if (scoreOrVal >= 60) {
+                    ticketsEarned = 2;
+                }
+
+                // 注入動態數值
+                document.getElementById('sniper-result-score-desc').innerHTML = `太棒了！你擊落許多氣球，獲得了 <span class="font-black text-[#0091ff] text-lg">${scoreOrVal}</span> 分！`;
+                document.getElementById('sniper-result-score-val').innerText = `${scoreOrVal}分`;
+                document.getElementById('sniper-result-ticket-val').innerText = `${ticketsEarned}張`;
+            } else {
+                // 保留其他遊戲原有的結算畫面
+                sniperCard.classList.add('hidden');
+                defaultCard.classList.remove('hidden');
+
+                if (gameType === "bangs") {
+                    subtitleEl.innerText = `恭喜成功修剪出 ${scoreOrVal}% 齊瀏海`;
+                } else {
+                    subtitleEl.innerText = `恭喜成功還原 ${scoreOrVal} 樣配件`;
+                }
+            }
+
+            document.getElementById('global-result-overlay').classList.remove('hidden');
+
+            setTimeout(() => {
+                returnToLobby();
+            }, 6000);
+        }
+
+        // 背景拉霸滾動定時任務
+        let lotteryInterval;
+        const prizePool = ["哈根達斯 $150 摺價券", "星巴克特選咖啡券", "超商 $50 折價券", "麥當勞套餐兌換券"];
+        setInterval(() => {
+            if(bangsState !== 'FINISHED') {
+                let idx = Math.floor(Math.random() * prizePool.length);
+                if (lotteryTrack) lotteryTrack.style.top = `-${idx * 60}px`;
+            }
+        }, 120);
+
+        // 綁定極限剪髮輸入事件
+        document.getElementById('scale-slider').addEventListener('input', refreshBangsLayout);
+        document.getElementById('y-slider').addEventListener('input', refreshBangsLayout);
+        document.getElementById('x-slider').addEventListener('input', refreshBangsLayout);
+        document.getElementById('base-pos-slider').addEventListener('input', refreshBangsLayout);
+        document.getElementById('base-width-slider').addEventListener('input', refreshBangsLayout);
+
+        window.onload = () => { setTimeout(refreshBangsLayout, 300); };
+    </script>
+
+    <!-- ============================================ -->
+    <!--  11. 內建合成物理音效模組 -->
+    <!-- ============================================ -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'shoot') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.12);
+                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.12);
+            } else if (type === 'pop') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(250, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'miss') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 0.15);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } else if (type === 'bomb') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 0.4);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            } else if (type === 'reload') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(500, audioCtx.currentTime + 0.08);
+                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.18);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.18);
+            } else if (type === 'win') {
+                const now = audioCtx.currentTime;
+                const notes = [261.63, 329.63, 392.00, 523.25, 659.25];
+                notes.forEach((freq, idx) => {
+                    const o = audioCtx.createOscillator();
+                    const g = audioCtx.createGain();
+                    o.connect(g);
+                    g.connect(audioCtx.destination);
+                    o.frequency.setValueAtTime(freq, now + idx * 0.1);
+                    g.gain.setValueAtTime(0.12, now + idx * 0.1);
+                    g.gain.linearRampToValueAtTime(0.01, now + idx * 0.1 + 0.25);
+                    o.start(now + idx * 0.1);
+                    o.stop(now + idx * 0.1 + 0.25);
+                });
+            } else if (type === 'fail') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.4);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            } else if (type === 'ticket') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(1100, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.04);
+            } else if (type === 'empty') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(90, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } else if (type === 'lobby-click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.08);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } else if (type === 'pay-click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } else if (type === 'pay-success') {
+                const now = audioCtx.currentTime;
+                const o1 = audioCtx.createOscillator();
+                const g1 = audioCtx.createGain();
+                o1.connect(g1); g1.connect(audioCtx.destination);
+                o1.frequency.setValueAtTime(987.77, now);
+                g1.gain.setValueAtTime(0.1, now);
+                g1.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                o1.start(now); o1.stop(now + 0.08);
+
+                const o2 = audioCtx.createOscillator();
+                const g2 = audioCtx.createGain();
+                o2.connect(g2); g2.connect(audioCtx.destination);
+                o2.frequency.setValueAtTime(1318.51, now + 0.08);
+                g2.gain.setValueAtTime(0.1, now + 0.08);
+                g2.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                o2.start(now + 0.08); o2.stop(now + 0.3);
+            } else if (type === 'countdown') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } else if (type === 'shutter') {
+                const bufferSize = audioCtx.sampleRate * 0.15;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+                const noiseNode = audioCtx.createBufferSource();
+                noiseNode.buffer = buffer;
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 1000;
+                const noiseGain = audioCtx.createGain();
+                noiseGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                noiseGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                noiseNode.connect(filter);
+                filter.connect(noiseGain);
+                noiseGain.connect(audioCtx.destination);
+                noiseNode.start();
+            } else if (type === 'snip') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } else if (type === 'correct') {
+                const now = audioCtx.currentTime;
+                [523.25, 659.25, 783.99].forEach((freq, idx) => {
+                    const o = audioCtx.createOscillator();
+                    const g = audioCtx.createGain();
+                    o.connect(g); g.connect(audioCtx.destination);
+                    o.frequency.setValueAtTime(freq, now + idx * 0.05);
+                    g.gain.setValueAtTime(0.1, now + idx * 0.05);
+                    g.gain.linearRampToValueAtTime(0.01, now + idx * 0.05 + 0.15);
+                    o.start(now + idx * 0.05);
+                    o.stop(now + idx * 0.05 + 0.15);
+                });
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 0.25);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.25);
+            }
+        }
+    </script>
+</body>
+</html>
